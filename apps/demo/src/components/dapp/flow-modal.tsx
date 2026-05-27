@@ -149,7 +149,7 @@ function TransitionContent({
       {/* Title — scrambled */}
       <div style={{ height: "28px" }} className="flex items-center">
         <span className="text-[17px] font-bold uppercase tracking-[0.18em]"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#d96820" }}>
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#fa7e23" }}>
           {scrambled[0]?.slice(0, title.length) ?? title}
         </span>
       </div>
@@ -179,7 +179,7 @@ function LogEntry({ line, fresh }: { line: LogLine; fresh: boolean }) {
           href={line.href}
           target="_blank"
           rel="noreferrer"
-          className="text-[#d96820] underline underline-offset-2 hover:text-[#f08040]"
+          className="text-[#fa7e23] underline underline-offset-2 hover:text-[#f08040]"
         >
           {line.value}
         </a>
@@ -960,14 +960,14 @@ function FlowModalInner({
                   fontFamily: "'JetBrains Mono', monospace",
                   color:
                     currentStep === s
-                      ? "#d96820"
+                      ? "#fa7e23"
                       : (s === "trade" && !identityDone) || (s === "deposit" && !tradeDone)
                         ? "rgba(107,107,116,0.4)"
                         : "rgba(107,107,116,0.8)",
-                  borderBottom: currentStep === s ? "1px solid #d96820" : "1px solid transparent",
+                  borderBottom: currentStep === s ? "1px solid #fa7e23" : "1px solid transparent",
                 }}
               >
-                <span style={{ color: currentStep === s ? "#d96820" : "rgba(107,107,116,0.5)" }}>
+                <span style={{ color: currentStep === s ? "#fa7e23" : "rgba(107,107,116,0.5)" }}>
                   {i + 1}.
                 </span>
                 {s === "identity" ? "Identity" : s === "trade" ? "Trade" : "Deposit"}
@@ -1009,7 +1009,7 @@ function FlowModalInner({
           {/* Title */}
           <div style={{ height: "28px" }} className="flex items-center">
             <span className="text-[17px] font-bold uppercase tracking-[0.18em]"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#d96820" }}>
+              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#fa7e23" }}>
               {stepContent.title}
             </span>
           </div>
@@ -1095,7 +1095,7 @@ function FlowModalInner({
                 fontFamily: "'JetBrains Mono', monospace",
                 background: "rgba(217,104,32,0.12)",
                 border: "1px solid rgba(217,104,32,0.3)",
-                color: "#d96820",
+                color: "#fa7e23",
               }}
             >
               Trade again →
@@ -1109,7 +1109,7 @@ function FlowModalInner({
                 fontFamily: "'JetBrains Mono', monospace",
                 background: stepContent.busy ? "rgba(217,104,32,0.08)" : "rgba(217,104,32,0.15)",
                 border: "1px solid rgba(217,104,32,0.35)",
-                color: stepContent.busy ? "rgba(217,104,32,0.5)" : "#d96820",
+                color: stepContent.busy ? "rgba(217,104,32,0.5)" : "#fa7e23",
                 cursor: stepContent.busy ? "not-allowed" : "pointer",
               }}
             >

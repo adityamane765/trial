@@ -1,6 +1,6 @@
 "use client";
 
-const orange = "#d96820";
+const orange = "#fa7e23";
 const green = "#5fb85f";
 
 const FEATURES = [

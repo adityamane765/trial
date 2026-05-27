@@ -49,7 +49,7 @@ export function FlowDiagram() {
     >
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-7 flex flex-col gap-0">
         <div className="flex flex-col items-start gap-2">
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#d96820" }}>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#fa7e23" }}>
             How a private trade flows
           </span>
           <h2 className="max-w-3xl leading-tight" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "clamp(18px, 2.2vw, 28px)", fontWeight: 600, letterSpacing: "-0.02em" }}>
@@ -73,7 +73,7 @@ export function FlowDiagram() {
                 }}
               >
                 <div className="flex items-center justify-between">
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "20px", lineHeight: 1, color: "#d96820" }}>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "20px", lineHeight: 1, color: "#fa7e23" }}>
                     0{s.id}
                   </span>
                   <span
@@ -81,7 +81,7 @@ export function FlowDiagram() {
                       s.cluster === "L1"
                         ? "border-nyx-signal-green/40 text-nyx-signal-green"
                         : s.cluster === "TEE"
-                        ? "border-[#d96820]/50 text-[#d96820]"
+                        ? "border-[#fa7e23]/50 text-[#fa7e23]"
                         : "border-nyx-signal-amber/45 text-nyx-signal-amber"
                     }`}
                   >
@@ -112,7 +112,7 @@ export function FlowDiagram() {
           <p className="max-w-xl text-[12px] text-nyx-fog">
             Want to see every PDA, every cryptographic primitive, and every instruction the on-chain programs accept?
           </p>
-          <a href="/architecture" className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-nyx-fog transition hover:text-[#d96820]">
+          <a href="/architecture" className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-nyx-fog transition hover:text-[#fa7e23]">
             Architecture deep-dive
             <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
               <path d="M2 5.5h7m0 0L5.5 2m3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />

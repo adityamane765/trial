@@ -47,7 +47,7 @@ export function NyxNav({ tone = "ink", launchHref = "/dapp", active = null }: Ny
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
                 color: active === l.key
-                  ? (isInk ? "#d96820" : "var(--nyx-ink)")
+                  ? (isInk ? "#fa7e23" : "var(--nyx-ink)")
                   : (isInk ? "rgba(174,172,176,0.7)" : "var(--nyx-slate)"),
               }}
             >
@@ -70,7 +70,7 @@ export function NyxNav({ tone = "ink", launchHref = "/dapp", active = null }: Ny
               borderRadius: "2px",
               background: "rgba(217,104,32,0.15)",
               border: "1px solid rgba(217,104,32,0.35)",
-              color: "#d96820",
+              color: "#fa7e23",
             }}
           >
             <span>Coming Soon on Mainnet</span>

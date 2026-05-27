@@ -97,7 +97,7 @@ function NyxStaticMark() {
     <svg width="28" height="18" viewBox="0 0 28 18" fill="none" aria-hidden="true">
       {dots.map(([x, y], i) => (
         <rect key={i} x={x} y={y} width={2} height={2}
-          fill={y <= 6 ? "#d96820" : y === 10 ? "#b84e10" : "#8a3808"}
+          fill={y <= 6 ? "#fa7e23" : y === 10 ? "#b84e10" : "#8a3808"}
           opacity={y <= 4 ? 0.9 : y === 6 ? 0.75 : y === 10 ? 0.65 : 0.45}
         />
       ))}
@@ -178,7 +178,7 @@ export function PixelLogoCanvas() {
       }
 
       // logo pixels
-      ctx.fillStyle = "#d96820";
+      ctx.fillStyle = "#fa7e23";
       for (const p of particles) {
         if (p.base === 0) continue;
         const half = p.size / 2;
@@ -188,7 +188,7 @@ export function PixelLogoCanvas() {
       // "darknyx" pixel word below logo
       const dotSize = Math.max(1, PS * 0.82);
       for (const { x, y, dark } of WORD_PIXELS) {
-        ctx.fillStyle = dark ? "#7a3810" : "#d96820";
+        ctx.fillStyle = dark ? "#7a3810" : "#fa7e23";
         const px = wordX + x * PS + (PS - dotSize) / 2;
         const py = wordY + y * PS + (PS - dotSize) / 2;
         ctx.fillRect(Math.round(px), Math.round(py), Math.round(dotSize), Math.round(dotSize));

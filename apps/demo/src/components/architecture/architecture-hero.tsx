@@ -20,12 +20,12 @@ function ScrollDownButton({ onClick }: { onClick?: () => void }) {
       <svg width="14" height="20" viewBox="0 0 14 20" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="arch-scroll-trail" x1="7" y1="0" x2="7" y2="13" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#d96820" stopOpacity="0" />
-            <stop offset="100%" stopColor="#d96820" stopOpacity="1" />
+            <stop offset="0%" stopColor="#fa7e23" stopOpacity="0" />
+            <stop offset="100%" stopColor="#fa7e23" stopOpacity="1" />
           </linearGradient>
         </defs>
         <line x1="7" y1="0" x2="7" y2="13" stroke="url(#arch-scroll-trail)" strokeWidth="1.4" strokeLinecap="round" />
-        <path d="M2.5 11l4.5 6 4.5-6" stroke="#d96820" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M2.5 11l4.5 6 4.5-6" stroke="#fa7e23" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       </svg>
     </button>
   );
@@ -60,7 +60,7 @@ export function ArchitectureHero({ onScrollDown }: { onScrollDown?: () => void }
             letterSpacing: "-0.045em",
           }}
         >
-          <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "#d96820" }}>
+          <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "#fa7e23" }}>
             Dark by default
           </span>
           <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "rgba(245,243,238,0.88)" }}>

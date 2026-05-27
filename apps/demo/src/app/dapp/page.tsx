@@ -115,7 +115,7 @@ export default function DappPage() {
                   fontFamily: "'JetBrains Mono', monospace",
                   background: "rgba(217,104,32,0.1)",
                   border: "1px solid rgba(217,104,32,0.2)",
-                  color: "#d96820",
+                  color: "#fa7e23",
                 }}
               >
                 Full flow · 3 steps
@@ -177,7 +177,7 @@ export default function DappPage() {
                       border: connected
                         ? "1px solid rgba(217,104,32,0.4)"
                         : "1px solid rgba(255,255,255,0.1)",
-                      color: connected ? "#d96820" : "#6b6b74",
+                      color: connected ? "#fa7e23" : "#6b6b74",
                     }}
                   >
                     {connected ? "Open notebook →" : "Connect wallet to start"}
@@ -215,7 +215,7 @@ export default function DappPage() {
           >
             <div className="nyx-grid pointer-events-none absolute inset-0 opacity-30" />
             <div className="relative mb-4 flex items-center justify-between">
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(217,104,32,0.1)", border: "1px solid rgba(217,104,32,0.2)", color: "#d96820" }}
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(217,104,32,0.1)", border: "1px solid rgba(217,104,32,0.2)", color: "#fa7e23" }}
                 className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.18em]">
                 ZK prover · smoke test
               </span>

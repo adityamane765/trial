@@ -31,7 +31,7 @@ const LAYERS: Layer[] = [
 ];
 
 const clusterColor = (c: string) =>
-  c === "L1" ? "rgba(95,184,95,0.8)" : c === "TEE" ? "#d96820" : "rgba(174,172,176,0.6)";
+  c === "L1" ? "rgba(95,184,95,0.8)" : c === "TEE" ? "#fa7e23" : "rgba(174,172,176,0.6)";
 const clusterBorder = (c: string) =>
   c === "L1" ? "rgba(95,184,95,0.35)" : c === "TEE" ? "rgba(217,104,32,0.45)" : "rgba(174,172,176,0.25)";
 

@@ -158,7 +158,7 @@ export function ProverSmokeTestPanel({ compact = false }: { compact?: boolean })
             fontFamily: "'JetBrains Mono', monospace",
             background: running ? "rgba(217,104,32,0.08)" : "rgba(217,104,32,0.15)",
             border: "1px solid rgba(217,104,32,0.35)",
-            color: running ? "rgba(217,104,32,0.5)" : "#d96820",
+            color: running ? "rgba(217,104,32,0.5)" : "#fa7e23",
           }}
         >
           {running ? "Running…" : "Run smoke test"}
@@ -195,7 +195,7 @@ export function ProverSmokeTestPanel({ compact = false }: { compact?: boolean })
 
 function StatusBadge({ status }: { status: StepStatus }) {
   const cls: Record<StepStatus, string> = {
-    idle: "bg-[#d96820]/10 text-[#d96820] ring-1 ring-[#d96820]/20",
+    idle: "bg-[#fa7e23]/10 text-[#fa7e23] ring-1 ring-[#fa7e23]/20",
     running: "bg-nyx-signal-amber/18 text-nyx-signal-amber ring-1 ring-nyx-signal-amber/35",
     success: "bg-nyx-signal-green/18 text-nyx-signal-green ring-1 ring-nyx-signal-green/35",
     error: "bg-nyx-signal-red/18 text-nyx-signal-red ring-1 ring-nyx-signal-red/35",

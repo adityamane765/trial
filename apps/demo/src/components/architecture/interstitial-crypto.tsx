@@ -23,7 +23,7 @@ export function InterstitialCrypto() {
             fontWeight: 700,
             lineHeight: 0.9,
             letterSpacing: "-0.05em",
-            color: "#d96820",
+            color: "#fa7e23",
           }}>
             depth 20
           </div>
@@ -70,8 +70,8 @@ export function InterstitialCrypto() {
                 stroke="rgba(255,255,255,0.24)" strokeWidth="1.6" strokeDasharray="12 12" />
               <path d="M 120 720 L 280 540 L 280 420 L 360 420 L 360 620 L 260 720"
                 fill="none" stroke="rgba(217,104,32,0.18)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M 280 420 L 360 420" fill="none" stroke="#d96820" strokeWidth="2" strokeLinecap="round" filter="url(#orangeGlow-crypto)" />
-              <circle r="4" fill="#d96820" cx="320" cy="470" />
+              <path d="M 280 420 L 360 420" fill="none" stroke="#fa7e23" strokeWidth="2" strokeLinecap="round" filter="url(#orangeGlow-crypto)" />
+              <circle r="4" fill="#fa7e23" cx="320" cy="470" />
               <defs>
                 <filter id="orangeGlow-crypto">
                   <feGaussianBlur stdDeviation="4" result="blur" />
