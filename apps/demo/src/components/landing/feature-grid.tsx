@@ -1,7 +1,7 @@
 "use client";
 
 const orange = "#d96820";
-const green = "rgba(95,184,95,1)";
+const green = "#5fb85f";
 
 const FEATURES = [
   {
@@ -48,26 +48,26 @@ const FEATURES = [
 
 export function FeatureGrid() {
   return (
-    <section id="landing-content" className="relative isolate border-t py-24"
-      style={{ borderColor: "rgba(255,255,255,0.06)" }}>
-      <div className="mx-auto max-w-6xl px-5 sm:px-7">
+    <section id="landing-content" className="relative isolate border-t"
+      style={{ borderColor: "rgba(255,255,255,0.06)", height: "100dvh", display: "flex", flexDirection: "column" }}>
+      <div className="mx-auto w-full max-w-6xl px-5 sm:px-7 flex flex-col flex-1 min-h-0 py-10">
 
-        <div className="max-w-2xl">
+        <div className="max-w-2xl shrink-0">
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: orange }}>
             What Nyx gives you
           </span>
-          <h2 className="mt-3 leading-tight" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "clamp(22px, 3vw, 34px)", fontWeight: 600, letterSpacing: "-0.02em" }}>
+          <h2 className="mt-3 leading-tight" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "clamp(18px, 2.2vw, 28px)", fontWeight: 600, letterSpacing: "-0.02em" }}>
             <span style={{ color: "rgba(245,243,238,0.85)" }}>A darkpool you can audit</span>
             <span style={{ color: "rgba(174,172,176,0.5)" }}> without compromising privacy.</span>
           </h2>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-px"
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-px flex-1 min-h-0"
           style={{ background: "rgba(255,255,255,0.05)" }}>
           {FEATURES.map((f) => (
             <article key={f.eyebrow}
               className="group relative overflow-hidden"
-              style={{ background: "#050506", minHeight: "300px", padding: "32px 32px 28px" }}>
+              style={{ background: "#050506", padding: "28px 32px 24px" }}>
 
               {/* background image */}
               <div className="absolute inset-0 pointer-events-none transition-opacity duration-500 group-hover:opacity-100"
