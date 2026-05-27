@@ -1,84 +1,54 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { NyxMark } from "@/components/brand/nyx-mark";
 
 /* -------------------------------------------------------------------------- */
-/* LOGO MASK — 30×20 grid                                                     */
+/* GRID DIMENSIONS                                                            */
 /* -------------------------------------------------------------------------- */
 
 const COLS = 30;
 const ROWS = 20;
 
-function buildLogoMask(): boolean[][] {
-  const mask: boolean[][] = Array.from({ length: ROWS }, () => Array(COLS).fill(false));
-  const cx = 14.5, cy = 9, r = 8;
-  for (let row = 0; row < ROWS; row++) {
-    for (let col = 0; col < COLS; col++) {
-      const dx = col - cx, dy = row - cy;
-      if (dy <= 0.5 && Math.sqrt(dx * dx + dy * dy) <= r + 0.3) mask[row][col] = true;
-    }
-  }
-  for (let col = 3; col <= 26; col++) { mask[11][col] = true; mask[12][col] = true; }
-  for (let col = 3; col <= 19; col++) { mask[14][col] = true; }
-  return mask;
-}
-
-const LOGO_MASK = buildLogoMask();
-
 /* -------------------------------------------------------------------------- */
-/* PIXEL FONT — 5×7 bitmap for lowercase a-z                                  */
-/* Each letter: array of 5-bit rows (top to bottom, MSB = leftmost pixel)     */
+/* PIXEL FONT — 5×7 bitmap — COMMENTED OUT, replaced by typed wordmark       */
 /* -------------------------------------------------------------------------- */
 
-const PIXEL_FONT: Record<string, number[]> = {
-  d: [0b00010, 0b00010, 0b01110, 0b10010, 0b10010, 0b10010, 0b01110],
-  a: [0b00000, 0b00000, 0b01110, 0b00010, 0b01110, 0b10010, 0b01110],
-  r: [0b00000, 0b00000, 0b10110, 0b11001, 0b10000, 0b10000, 0b10000],
-  k: [0b10000, 0b10000, 0b10100, 0b11000, 0b10100, 0b10010, 0b10001],
-  n: [0b00000, 0b00000, 0b11010, 0b10110, 0b10010, 0b10010, 0b10010],
-  y: [0b00000, 0b00000, 0b10010, 0b10010, 0b01110, 0b00010, 0b01100],
-  x: [0b00000, 0b00000, 0b10001, 0b01010, 0b00100, 0b01010, 0b10001],
-};
-
-/* Build pixel positions for a word. Returns array of {x, y, isDark} */
-function buildWordPixels(word: string, darkSplit: number): Array<{ x: number; y: number; dark: boolean }> {
-  const LETTER_W = 5;
-  const LETTER_H = 7;
-  const KERNING = 1; // gap between letters
-  const pixels: Array<{ x: number; y: number; dark: boolean }> = [];
-
-  let cursorX = 0;
-  for (let li = 0; li < word.length; li++) {
-    const ch = word[li];
-    const bitmap = PIXEL_FONT[ch];
-    if (!bitmap) { cursorX += LETTER_W + KERNING; continue; }
-    const isDark = li >= darkSplit; // "nyx" part
-    for (let row = 0; row < LETTER_H; row++) {
-      for (let bit = 0; bit < LETTER_W; bit++) {
-        if (bitmap[row] & (1 << (LETTER_W - 1 - bit))) {
-          pixels.push({ x: cursorX + bit, y: row, dark: isDark });
-        }
-      }
-    }
-    cursorX += LETTER_W + KERNING;
-  }
-  return pixels;
-}
-
-// "dark" = chars 0-3 (orange), "nyx" = chars 4-6 (darker)
-const WORD_PIXELS = buildWordPixels("darknyx", 4);
-
-/* -------------------------------------------------------------------------- */
-/* PARTICLE                                                                   */
-/* -------------------------------------------------------------------------- */
-
-interface Particle {
-  col: number; row: number;
-  x: number; y: number;
-  base: number;
-  size: number;
-}
+// const PIXEL_FONT: Record<string, number[]> = {
+//   d: [0b00010, 0b00010, 0b01110, 0b10010, 0b10010, 0b10010, 0b01110],
+//   a: [0b00000, 0b00000, 0b01110, 0b00010, 0b01110, 0b10010, 0b01110],
+//   r: [0b00000, 0b00000, 0b10110, 0b11001, 0b10000, 0b10000, 0b10000],
+//   k: [0b10000, 0b10000, 0b10100, 0b11000, 0b10100, 0b10010, 0b10001],
+//   n: [0b00000, 0b00000, 0b11010, 0b10110, 0b10010, 0b10010, 0b10010],
+//   y: [0b00000, 0b00000, 0b10010, 0b10010, 0b01110, 0b00010, 0b01100],
+//   x: [0b00000, 0b00000, 0b10001, 0b01010, 0b00100, 0b01010, 0b10001],
+// };
+//
+// function buildWordPixels(word: string, darkSplit: number): Array<{ x: number; y: number; dark: boolean }> {
+//   const LETTER_W = 5;
+//   const LETTER_H = 7;
+//   const KERNING = 1;
+//   const pixels: Array<{ x: number; y: number; dark: boolean }> = [];
+//   let cursorX = 0;
+//   for (let li = 0; li < word.length; li++) {
+//     const ch = word[li];
+//     const bitmap = PIXEL_FONT[ch];
+//     if (!bitmap) { cursorX += LETTER_W + KERNING; continue; }
+//     const isDark = li >= darkSplit;
+//     for (let row = 0; row < LETTER_H; row++) {
+//       for (let bit = 0; bit < LETTER_W; bit++) {
+//         if (bitmap[row] & (1 << (LETTER_W - 1 - bit))) {
+//           pixels.push({ x: cursorX + bit, y: row, dark: isDark });
+//         }
+//       }
+//     }
+//     cursorX += LETTER_W + KERNING;
+//   }
+//   return pixels;
+// }
+//
+// const WORD_PIXELS = buildWordPixels("darknyx", 4);
 
 /* -------------------------------------------------------------------------- */
 /* STATIC SVG MARK — top-left header, no animation                           */
@@ -109,11 +79,18 @@ function NyxStaticMark() {
 /* MAIN COMPONENT                                                             */
 /* -------------------------------------------------------------------------- */
 
+interface SvgLayout {
+  originX: number; originY: number;
+  gridW: number; gridH: number;
+  wordFontSize: number; wordTop: number;
+}
+
 export function PixelLogoCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const router = useRouter();
   const animRef = useRef<number>(0);
   const layoutRef = useRef({ originX: 0, originY: 0, CELL: 0, PIXEL: 0 });
+  const [svgLayout, setSvgLayout] = useState<SvgLayout | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -132,32 +109,20 @@ export function PixelLogoCanvas() {
     const CELL = PIXEL + GAP;
     const gridW = COLS * CELL;
     const gridH = ROWS * CELL;
+
+    // Typed wordmark: size it so "darknyx" (7 chars, Space Grotesk 600)
+    // spans approximately gridW. Empirically ~0.6 ch/px ratio at weight 600.
+    const wordFontSize = Math.round(gridW / 4.2);
+
+    const gap = CELL * 0.25; // reduced gap between logo and wordmark
+    const totalH = gridH + gap + wordFontSize * 1.1;
+
     const originX = (W - gridW) / 2;
-    const originY = (H - gridH) / 2;
+    const originY = (H - totalH) / 2;
     layoutRef.current = { originX, originY, CELL, PIXEL };
 
-    const particles: Particle[] = [];
-    for (let row = 0; row < ROWS; row++) {
-      for (let col = 0; col < COLS; col++) {
-        const active = LOGO_MASK[row][col];
-        particles.push({
-          col, row,
-          x: originX + col * CELL + PIXEL / 2,
-          y: originY + row * CELL + PIXEL / 2,
-          base: active ? 1 : 0,
-          size: PIXEL * 0.88,
-        });
-      }
-    }
-
-    // "darknyx" = 7 letters × (5+1 kerning) - 1 trailing kerning = 41 pixel-cols wide
-    const wordPixelW = 41;
-    // Scale so the word spans exactly gridW pixels, aligning with logo left/right edges
-    const PS = gridW / wordPixelW;
-
-    const wordX = originX; // flush with left edge of logo grid
-    const logoBottom = originY + gridH;
-    const wordY = logoBottom + CELL * 0.5;
+    const wordTop = originY + gridH + gap;
+    setSvgLayout({ originX, originY, gridW, gridH, wordFontSize, wordTop });
 
     function draw() {
       if (cvs.width !== window.innerWidth || cvs.height !== window.innerHeight) {
@@ -177,22 +142,7 @@ export function PixelLogoCanvas() {
         ctx.beginPath(); ctx.moveTo(Math.round(gx) + 0.5, 0); ctx.lineTo(Math.round(gx) + 0.5, H); ctx.stroke();
       }
 
-      // logo pixels
-      ctx.fillStyle = "#FA7E23";
-      for (const p of particles) {
-        if (p.base === 0) continue;
-        const half = p.size / 2;
-        ctx.fillRect(Math.round(p.x - half), Math.round(p.y - half), Math.round(p.size), Math.round(p.size));
-      }
-
-      // "darknyx" pixel word below logo
-      const dotSize = Math.max(1, PS * 0.82);
-      for (const { x, y, dark } of WORD_PIXELS) {
-        ctx.fillStyle = dark ? "#7a3810" : "#FA7E23";
-        const px = wordX + x * PS + (PS - dotSize) / 2;
-        const py = wordY + y * PS + (PS - dotSize) / 2;
-        ctx.fillRect(Math.round(px), Math.round(py), Math.round(dotSize), Math.round(dotSize));
-      }
+      // pixel wordmark drawing removed — see commented-out PIXEL_FONT above
 
       animRef.current = requestAnimationFrame(draw);
     }
@@ -216,7 +166,7 @@ export function PixelLogoCanvas() {
         </div>
         <span
           className="absolute left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-[0.22em] pointer-events-none"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(217,172,120,0.85)" }}
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(250,180,100,0.95)" }}
         >
           Click on logo to enter DarkNyx
         </span>
@@ -225,24 +175,54 @@ export function PixelLogoCanvas() {
       {/* CANVAS */}
       <canvas
         ref={canvasRef}
-        onClick={(e) => {
-          const { originX, originY, CELL } = layoutRef.current;
-          const col = Math.floor((e.clientX - originX) / CELL);
-          const row = Math.floor((e.clientY - originY) / CELL);
-          if (col >= 0 && col < COLS && row >= 0 && row < ROWS && LOGO_MASK[row][col]) {
-            router.push("/landing");
-          }
-        }}
-        onMouseMove={(e) => {
-          const { originX, originY, CELL } = layoutRef.current;
-          const col = Math.floor((e.clientX - originX) / CELL);
-          const row = Math.floor((e.clientY - originY) / CELL);
-          const onLogo = col >= 0 && col < COLS && row >= 0 && row < ROWS && LOGO_MASK[row][col];
-          e.currentTarget.style.cursor = onLogo ? "pointer" : "default";
-        }}
         className="absolute inset-0 w-full h-full"
         aria-label="DarkNyx — click logo to enter"
       />
+
+      {/* SVG LOGO OVERLAY */}
+      {svgLayout && (
+        <button
+          onClick={() => router.push("/landing")}
+          style={{
+            position: "absolute",
+            left: "50%",
+            top: svgLayout.originY + svgLayout.gridH / 2,
+            transform: "translate(-50%, -50%)",
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+          }}
+          aria-label="Enter DarkNyx"
+        >
+          <NyxMark
+            size={Math.min(svgLayout.gridW, svgLayout.gridH)}
+            style={{ color: "#FA7E23" }}
+          />
+        </button>
+      )}
+
+      {/* TYPED WORDMARK — Space Grotesk, design-system font */}
+      {svgLayout && (
+        <div
+          style={{
+            position: "absolute",
+            top: svgLayout.wordTop,
+            left: "50%",
+            transform: "translateX(-50%)",
+            fontFamily: "'Space Grotesk', 'Inter', system-ui, sans-serif",
+            fontSize: svgLayout.wordFontSize,
+            lineHeight: 1,
+            letterSpacing: "-0.03em",
+            userSelect: "none",
+            pointerEvents: "none",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <span style={{ fontWeight: 600, color: "#FA7E23" }}>dark</span>
+          <span style={{ fontWeight: 400, color: "#7a3810" }}>nyx</span>
+        </div>
+      )}
     </div>
   );
 }
