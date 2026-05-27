@@ -413,6 +413,8 @@ export async function POST(req: Request) {
       makerNoteCommitment: makerReceipt.noteCommitment,
       makerOrderId: new Uint8Array(orderId),
       makerExpirySlot: expiry,
+      settleLookupTable: new PublicKey(cfg.settleLookupTable),
+      repoRoot,
     });
     signatures.push(...settleOutcome.lockSettleSignatures);
 

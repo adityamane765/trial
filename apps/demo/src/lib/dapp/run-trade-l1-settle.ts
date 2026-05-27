@@ -1,6 +1,7 @@
 import {
   buildLockNoteInstruction,
-  buildSettleIx,
+  buildSettleBatchedIx,
+  buildCloseBatchValidityMarkerIx,
   buildEd25519VerifyIx,
   canonicalPayloadHash,
   decodeBatchResults,
@@ -8,11 +9,21 @@ import {
   noteCommitment,
   nullifier,
   vaultConfigPda,
+  batchValidityMarkerPda,
+  noteLockPda,
   RELOCK_ORDER_ID_NONE,
   ZERO_COMMITMENT,
   type MatchResultPayload,
 } from "@nyx/sdk";
-import { ComputeBudgetProgram, Connection, Keypair, PublicKey, sendAndConfirmTransaction, Transaction } from "@solana/web3.js";
+import {
+  AddressLookupTableProgram,
+  ComputeBudgetProgram,
+  Connection,
+  Keypair,
+  PublicKey,
+  sendAndConfirmTransaction,
+  Transaction,
+} from "@solana/web3.js";
 import nacl from "tweetnacl";
 
 import { actorSeed } from "@/lib/dapp/persona-client";
@@ -26,6 +37,12 @@ import {
 } from "@/lib/dapp/change-note-derive";
 import { collectVaultLeavesOrdered } from "@/lib/dapp/vault-leaf-history";
 import { MerkleShadow } from "@/lib/dapp/merkle-shadow";
+import { landVerifyMatchBatch } from "../../../../packages/sdk/tests/helpers/verify-match-batch.js";
+import {
+  merkleInclusionPath,
+  type MatchSlotWitness,
+} from "../../../../packages/sdk/tests/helpers/match-batch-prover.js";
+import { sendSettleV0 } from "../../../../packages/sdk/tests/helpers/settle-v0.js";
 
 function isZero32(b: Uint8Array): boolean {
   return b.every((x) => x === 0);
@@ -53,6 +70,10 @@ export interface TradeL1SettleContext {
   makerNoteCommitment: Uint8Array;
   makerOrderId: Uint8Array;
   makerExpirySlot: bigint;
+  /** The static settle ALT created at devnet-setup time. */
+  settleLookupTable: PublicKey;
+  /** Repo root for snarkjs circuit artifact resolution. */
+  repoRoot: string;
 }
 
 export interface TradeL1SettleResult {
@@ -76,9 +97,6 @@ export async function runTradeL1Settle(ctx: TradeL1SettleContext): Promise<Trade
   if (!brAcct?.data) throw new Error("BatchResults account missing on L1");
   const brView = decodeBatchResults(brAcct.data);
 
-  // Search the ring buffer for THIS run's match (the BatchResults ring is keyed
-  // by next_match_id so prior runs may occupy lower indices). Compare against
-  // the user's quote note commitment + maker's note commitment.
   const userQuoteBuf = Buffer.from(ctx.userQuoteNoteCommitment);
   const makerNoteBuf = Buffer.from(ctx.makerNoteCommitment);
   const mr = brView.results.find(
@@ -102,9 +120,6 @@ export async function runTradeL1Settle(ctx: TradeL1SettleContext): Promise<Trade
   }
 
   if (mr.buyerFeeAmt !== 0n || mr.sellerFeeAmt !== 0n) {
-    // counter-and-match runs ensureZeroProtocolFee before submit_order, so
-    // the vault should have fee_rate_bps=0 at match time. Hitting this path
-    // means the auto-zero raced this match (e.g. concurrent dapp run).
     throw new Error(
       "Demo L1 settle + BASE withdraw currently requires zero protocol fees on the match " +
         `(buyer_fee=${mr.buyerFeeAmt}, seller_fee=${mr.sellerFeeAmt}). The dapp's pre-flight should have ` +
@@ -181,9 +196,10 @@ export async function runTradeL1Settle(ctx: TradeL1SettleContext): Promise<Trade
     batchSlot: mr.batchSlot,
   };
 
-  const msg = canonicalPayloadHash(payload);
-  const sigTee = nacl.sign.detached(msg, tee.secretKey);
+  const canonicalHash = canonicalPayloadHash(payload);
+  const sigTee = nacl.sign.detached(canonicalHash, tee.secretKey);
 
+  // ── Step 1: lock both notes ──────────────────────────────────────────────
   const lockTx = new Transaction().add(
     ComputeBudgetProgram.setComputeUnitLimit({ units: 400_000 }),
     buildLockNoteInstruction({
@@ -205,20 +221,123 @@ export async function runTradeL1Settle(ctx: TradeL1SettleContext): Promise<Trade
   );
   const lockSig = await sendAndConfirmTransaction(l1, lockTx, [tee], { commitment: "confirmed" });
 
-  const settleTx = new Transaction().add(
-    ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
-    buildEd25519VerifyIx({
-      teePubkey: tee.publicKey.toBytes(),
-      signature: sigTee,
-      message: msg,
-    }),
-    buildSettleIx({
+  // ── Step 2: build MatchSlotWitness for the real match ───────────────────
+  const realSlot: MatchSlotWitness = {
+    noteAcommitment: mr.noteBuyer,
+    noteBcommitment: mr.noteSeller,
+    noteCcommitment,
+    noteDcommitment,
+    noteEcommitment: noteE,
+    noteFcommitment: noteF,
+    quoteMint: quoteMint.toBytes(),
+    baseMint: baseMint.toBytes(),
+    baseAmount: mr.baseAmt,
+    quoteAmount: mr.quoteAmt,
+    buyerChangeAmt: mr.buyerChangeAmt,
+    sellerChangeAmt: mr.sellerChangeAmt,
+    buyerFeeAmt: mr.buyerFeeAmt,
+    sellerFeeAmt: mr.sellerFeeAmt,
+    batchSlot: mr.batchSlot,
+    aOwnerCommit: ucBuyer,
+    bOwnerCommit: ucSeller,
+    aAmount: mr.buyerNoteValue,
+    bAmount: mr.sellerNoteValue,
+    aNonce: be32ToBigInt(mr.noteBuyer.slice(0, 32)),
+    aBlinding: 1n,
+    bNonce: be32ToBigInt(mr.noteSeller.slice(0, 32)),
+    bBlinding: 1n,
+    cNonce: be32ToBigInt(nonceC),
+    cBlinding: be32ToBigInt(blindC),
+    dNonce: be32ToBigInt(nonceD),
+    dBlinding: be32ToBigInt(blindD),
+    eNonce: 0n,
+    eBlinding: 0n,
+    fNonce: 0n,
+    fBlinding: 0n,
+    clearingPrice: mr.price,
+  };
+
+  // ── Step 3: prove + land verify_match_batch ──────────────────────────────
+  const batchResult = await landVerifyMatchBatch({
+    connection: l1,
+    vaultProgramId,
+    teeKeypair: tee,
+    realSlots: [realSlot],
+    repoRoot: ctx.repoRoot,
+  });
+
+  // ── Step 4: compute Merkle inclusion path for slot 0 ────────────────────
+  const inclusion = await merkleInclusionPath(batchResult.leaves, 0);
+
+  // ── Step 5: per-batch ALT for the 5 derivable PDAs ──────────────────────
+  const [lockA] = noteLockPda(vaultProgramId, payload.noteAcommitment);
+  const [lockB] = noteLockPda(vaultProgramId, payload.noteBcommitment);
+  const [lockEpda] = noteLockPda(vaultProgramId, payload.noteEcommitment ?? new Uint8Array(32));
+  const [lockFpda] = noteLockPda(vaultProgramId, payload.noteFcommitment ?? new Uint8Array(32));
+  const [batchMarker] = batchValidityMarkerPda(vaultProgramId, batchResult.merkleRoot);
+
+  const blockhashCtx = await l1.getLatestBlockhashAndContext("confirmed");
+  const slotForAlt = blockhashCtx.context.slot;
+  const [createAltIx, batchAlt] = AddressLookupTableProgram.createLookupTable({
+    authority: tee.publicKey,
+    payer: tee.publicKey,
+    recentSlot: slotForAlt,
+  });
+  const extendAltIx = AddressLookupTableProgram.extendLookupTable({
+    payer: tee.publicKey,
+    authority: tee.publicKey,
+    lookupTable: batchAlt,
+    addresses: [lockA, lockB, lockEpda, lockFpda, batchMarker],
+  });
+  const altTx = new Transaction().add(createAltIx, extendAltIx);
+  const altSig = await sendAndConfirmTransaction(l1, altTx, [tee], { commitment: "confirmed" });
+
+  // Wait one slot for ALT to be usable
+  for (let attempt = 0; attempt < 30; attempt++) {
+    const now = await l1.getSlot("confirmed");
+    if (now > slotForAlt) break;
+    await new Promise((r) => setTimeout(r, 400));
+  }
+
+  // ── Step 6: tee_forced_settle_batched via v0 + stacked ALTs ─────────────
+  const settleSig = await sendSettleV0({
+    connection: l1,
+    signer: tee,
+    altPubkey: ctx.settleLookupTable,
+    extraAltPubkeys: [batchAlt],
+    instructions: [
+      ComputeBudgetProgram.setComputeUnitLimit({ units: 1_400_000 }),
+      buildEd25519VerifyIx({
+        teePubkey: tee.publicKey.toBytes(),
+        signature: sigTee,
+        message: canonicalHash,
+      }),
+      buildSettleBatchedIx({
+        programId: vaultProgramId,
+        teeAuthority: tee.publicKey,
+        payload,
+        matchIndex: 0,
+        merkleProof: [
+          inclusion.siblings[0],
+          inclusion.siblings[1],
+          inclusion.siblings[2],
+          inclusion.siblings[3],
+        ],
+        merkleRoot: batchResult.merkleRoot,
+      }),
+    ],
+  });
+
+  // ── Step 7: close BatchValidityMarker to reclaim rent ───────────────────
+  const closeTx = new Transaction().add(
+    buildCloseBatchValidityMarkerIx({
       programId: vaultProgramId,
-      teeAuthority: tee.publicKey,
-      payload,
+      authority: tee.publicKey,
+      payer: tee.publicKey,
+      merkleRoot: batchResult.merkleRoot,
     }),
   );
-  const settleSig = await sendAndConfirmTransaction(l1, settleTx, [tee], { commitment: "confirmed" });
+  const closeSig = await sendAndConfirmTransaction(l1, closeTx, [tee], { commitment: "confirmed" });
 
   const vcPost = await l1.getAccountInfo(vaultPda, "confirmed");
   if (!vcPost?.data) throw new Error("vault_config missing after settle");
@@ -228,13 +347,7 @@ export async function runTradeL1Settle(ctx: TradeL1SettleContext): Promise<Trade
     8,
   ).getBigUint64(0, true);
 
-  // Best-effort post-settle replay: walk RPC history, build a shadow tree,
-  // and check the leaf at `leafBeforeSettle` matches our derived note_c. We
-  // do NOT throw on mismatch here — `lock_note` + `tee_forced_settle` have
-  // already landed on L1 by this point, and the canonical validation lives
-  // in `trade-withdraw-prepare` (which the user hits explicitly when they
-  // press the withdraw button). Throwing here would only orphan the trade
-  // metadata the UI needs to drive the withdraw step.
+  // Best-effort post-settle Merkle replay
   const cHex = Buffer.from(noteCcommitment).toString("hex");
   try {
     const leaves = await collectVaultLeavesOrdered(l1, vaultProgramId, Number(leafAfter), {
@@ -249,8 +362,7 @@ export async function runTradeL1Settle(ctx: TradeL1SettleContext): Promise<Trade
     const onChainRoot = vcPost.data.subarray(112, 144);
     if (Buffer.compare(Buffer.from(w.root), Buffer.from(onChainRoot)) !== 0) {
       console.warn(
-        "[run-trade-l1-settle] shadow Merkle root != vault current_root — RPC leaf replay may be incomplete. " +
-          "Trade is settled on-chain; trade-withdraw-prepare will revalidate when the user presses Withdraw.",
+        "[run-trade-l1-settle] shadow Merkle root != vault current_root — RPC leaf replay may be incomplete.",
       );
     }
     const leafBytes = leaves[noteCLeaf];
@@ -266,10 +378,13 @@ export async function runTradeL1Settle(ctx: TradeL1SettleContext): Promise<Trade
     );
   }
 
-  const out: TradeL1SettleResult = {
+  return {
     lockSettleSignatures: [
       { label: "lock_note ×2 (L1)", signature: lockSig, cluster: "l1" },
-      { label: "Ed25519 + tee_forced_settle (L1)", signature: settleSig, cluster: "l1" },
+      { label: "verify_match_batch (L1)", signature: batchResult.txSig, cluster: "l1" },
+      { label: "per-batch ALT create+extend (L1)", signature: altSig, cluster: "l1" },
+      { label: "Ed25519 + tee_forced_settle_batched (L1)", signature: settleSig, cluster: "l1" },
+      { label: "close_batch_validity_marker (L1)", signature: closeSig, cluster: "l1" },
     ],
     buyerBaseNote: {
       matchId: mr.matchId.toString(),
@@ -282,5 +397,4 @@ export async function runTradeL1Settle(ctx: TradeL1SettleContext): Promise<Trade
       vaultLeafCountAfter: leafAfter.toString(),
     },
   };
-  return out;
 }
