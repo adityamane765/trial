@@ -33,7 +33,9 @@ export function AsciiHeroBanner({ contained = false }: { contained?: boolean }) 
       const width = contained
         ? (canvas.parentElement?.offsetWidth ?? 480)
         : window.innerWidth;
-      const height = contained ? 340 : 620;
+      const height = contained
+        ? (canvas.parentElement?.offsetHeight ?? 340)
+        : 620;
 
       canvas.width = width * DPR;
       canvas.height = height * DPR;
@@ -77,14 +79,14 @@ export function AsciiHeroBanner({ contained = false }: { contained?: boolean }) 
       const centerY = Math.floor(ROWS / 2);
 
       const logo: string[] = [
-        "            █████████████            ",
-        "         ███████████████████         ",
-        "      █████████████████████████       ",
-        "     ███████████████████████████     ",
-        "     ███████████████████████████     ",
-        "     ███████████████████████████     ",
-        "  ████████████████████████████████   ",
-        "  ███████████████████████████         ",
+        "            ███████████            ",
+        "         █████████████████         ",
+        "      ███████████████████████       ",
+        "     █████████████████████████     ",
+        "     █████████████████████████     ",
+        "     █████████████████████████     ",
+        "  ██████████████████████████████   ",
+        "  █████████████████████████         ",
       ];
 
       const logoWidth = logo[0].length;
@@ -141,11 +143,6 @@ export function AsciiHeroBanner({ contained = false }: { contained?: boolean }) 
         cursor += 7;
       }
 
-      for (let i = 0; i < 80; i++) {
-        Math.floor(Math.random() * COLS);
-        Math.floor(Math.random() * ROWS);
-        void i;
-      }
     }
 
     function draw() {
@@ -224,13 +221,13 @@ export function AsciiHeroBanner({ contained = false }: { contained?: boolean }) 
       cancelAnimationFrame(animRef.current);
       window.removeEventListener("resize", resize);
     };
-  }, [contained]);
+  }, []);
 
   if (contained) {
     return (
-      <div className="relative overflow-hidden" style={{ borderRadius: "2px", background: "#050505" }}>
-        <canvas ref={canvasRef} className="block w-full" style={{ height: "340px" }} />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_30%,black_100%)]" />
+      <div className="relative overflow-hidden h-full" style={{ borderRadius: "2px", background: "#050505" }}>
+        <canvas ref={canvasRef} className="block w-full h-full" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,transparent_30%,black_100%)]" />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-black/50 to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-t from-black/60 to-transparent" />
       </div>
