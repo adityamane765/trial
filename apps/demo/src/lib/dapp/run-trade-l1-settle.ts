@@ -37,12 +37,12 @@ import {
 } from "@/lib/dapp/change-note-derive";
 import { collectVaultLeavesOrdered } from "@/lib/dapp/vault-leaf-history";
 import { MerkleShadow } from "@/lib/dapp/merkle-shadow";
-import { landVerifyMatchBatch } from "../../../../packages/sdk/tests/helpers/verify-match-batch.js";
+import { landVerifyMatchBatch } from "./verify-match-batch.js";
 import {
   merkleInclusionPath,
   type MatchSlotWitness,
-} from "../../../../packages/sdk/tests/helpers/match-batch-prover.js";
-import { sendSettleV0 } from "../../../../packages/sdk/tests/helpers/settle-v0.js";
+} from "./match-batch-prover.js";
+import { sendSettleV0 } from "./settle-v0.js";
 
 function isZero32(b: Uint8Array): boolean {
   return b.every((x) => x === 0);
