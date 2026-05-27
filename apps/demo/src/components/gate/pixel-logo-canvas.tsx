@@ -216,7 +216,7 @@ export function PixelLogoCanvas() {
         </div>
         <span
           className="absolute left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-[0.22em] pointer-events-none"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(160,140,110,0.45)" }}
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(160,140,110,0.85)" }}
         >
           Click on logo to enter DarkNyx
         </span>
