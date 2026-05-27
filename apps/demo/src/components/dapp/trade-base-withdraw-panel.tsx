@@ -48,8 +48,13 @@ export function TradeBaseWithdrawPanel() {
   }, []);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    try {
+      const raw = sessionStorage.getItem(NYX_TRADE_WITHDRAW_KEY);
+      setStored(raw ? (JSON.parse(raw) as Stored) : null);
+    } catch {
+      setStored(null);
+    }
+  }, []);
 
   const clearHint = () => {
     try {

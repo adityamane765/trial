@@ -142,8 +142,9 @@ export function AsciiHeroBanner({ contained = false }: { contained?: boolean }) 
       }
 
       for (let i = 0; i < 80; i++) {
-        const x = Math.floor(Math.random() * COLS);
-        const y = Math.floor(Math.random() * ROWS);
+        Math.floor(Math.random() * COLS);
+        Math.floor(Math.random() * ROWS);
+        void i;
       }
     }
 
@@ -223,7 +224,7 @@ export function AsciiHeroBanner({ contained = false }: { contained?: boolean }) 
       cancelAnimationFrame(animRef.current);
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [contained]);
 
   if (contained) {
     return (

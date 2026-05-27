@@ -81,7 +81,6 @@ export function PrivateDepositWithdrawPanel() {
     // SSR renders this component with a null session; hydration on the client
     // then reads sessionStorage and re-renders. See the matching note in
     // dapp-trade-flow-panel.tsx — same hydration constraint applies here.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSession(readDappSessionForOwner(connectedOwner));
     const s = readDappSessionForOwner(connectedOwner);
     if (s) {

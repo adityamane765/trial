@@ -60,7 +60,10 @@ interface StepContent {
 function useScramble(text: string, active: boolean): string {
   const [display, setDisplay] = useState(text);
   useEffect(() => {
-    if (!active) { setDisplay(text); return; }
+    if (!active) {
+      setDisplay(text);
+      return;
+    }
     let frame = 0;
     const id = setInterval(() => {
       setDisplay(
@@ -94,7 +97,11 @@ function useStepTransition(
   const [scrambled, setScrambled] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!active) { setOpacity(1); setScrambled([]); return; }
+    if (!active) {
+      setOpacity(1);
+      setScrambled([]);
+      return;
+    }
     const totalMs = 900;
     const intervalMs = 40;
     let elapsed = 0;
@@ -163,7 +170,7 @@ function TransitionContent({
 /* -------------------------------------------------------------------------- */
 
 function LogEntry({ line, fresh }: { line: LogLine; fresh: boolean }) {
-  const _ = useScramble(`${line.label}: ${line.value}`, fresh);
+  useScramble(`${line.label}: ${line.value}`, fresh);
   return (
     <div className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px]" style={{ height: "28px", alignItems: "center" }}>
       <span className="text-[#6b6b74]">{line.label}:</span>
@@ -228,13 +235,11 @@ function FlowModalInner({
   const [tradeStep, setTradeStep] = useState<
     "idle" | "registered" | "slot_ready" | "deposited" | "order_er" | "matched"
   >("idle");
-  const [tradeSession, setTradeSession] = useState<DappSessionV1 | null>(null);
+  const [, setTradeSession] = useState<DappSessionV1 | null>(null);
   const slotIdxRef = useRef<number | null>(null);
   const depositNoteRef = useRef<{ commitmentHex: string; amount: string } | null>(null);
   const orderCtxRef = useRef<{ orderIdHex: string; expirySlot: string } | null>(null);
-  const depositNonceRef = useRef(
-    (BigInt(Date.now()) + 333_333n).toString()
-  );
+  const depositNonceRef = useRef((BigInt(Date.now()) + 333_333n).toString());
   const tokenMetaRef = useRef<{
     baseDecimals: number;
     quoteDecimals: number;
@@ -553,7 +558,7 @@ function FlowModalInner({
         if (!dn || slotIdxRef.current == null) throw new Error("Missing deposit / slot");
         setTradeLines((p) => [...p, { label: "status", value: "Submitting bid on PER…" }]);
         const baseAtoms = toAtoms(baseAmount, baseDecimals);
-        const priceLim = BigInt(orderPriceLimitStr);
+        void BigInt(orderPriceLimitStr); // validate parseable
         const trading = Keypair.fromSecretKey(bs58.decode(s.tradingSecretKeyBase58));
         const now = await l1.getSlot("confirmed");
         const expiry = BigInt(now) + 500n;
@@ -651,7 +656,7 @@ function FlowModalInner({
       setTradeError(e instanceof Error ? e.message : String(e));
       setTradeBusy(false);
     }
-  }, [connectedOwner, tradeStep, forwarder, l1]);
+  }, [connectedOwner, tradeStep, forwarder, l1, er]);
 
   /* ------------------------------------------------------------------------ */
   /* STEP 3: PRIVATE DEPOSIT/WITHDRAW                                         */

@@ -37,7 +37,7 @@ export function SecurityAndRoadmap() {
             </h2>
           </div>
           <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
-            {PROTECTS_AGAINST.map((item, idx) => (
+            {PROTECTS_AGAINST.map((item) => (
               <div key={item.title} style={{ flex: 1, display: "flex", alignItems: "center", gap: "16px", padding: "0 32px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style={{ flexShrink: 0 }}>
                   <circle cx="7" cy="7" r="6" stroke="rgba(95,184,95,0.35)" strokeWidth="0.8" />

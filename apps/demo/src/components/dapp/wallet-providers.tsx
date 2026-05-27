@@ -36,7 +36,6 @@ export function DappProviders({ children }: { children: React.ReactNode }) {
       // it before pushing to production. In prod builds, the warning still
       // fires but only the operator's first visit will see it.
       if (typeof window !== "undefined" && /[?&](api[-_]?key|apikey)=/i.test(fromEnv)) {
-        // eslint-disable-next-line no-console
         console.warn(
           "[DappProviders] NEXT_PUBLIC_DEVNET_RPC_URL appears to contain an api-key query " +
             "parameter. NEXT_PUBLIC_* env vars are inlined into the public bundle. Move " +

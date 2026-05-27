@@ -19,12 +19,13 @@ export default function DappPage() {
   const [mounted, setMounted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
   useEffect(() => {
-    if (!publicKey) { setSolBalance(null); return; }
+    if (!publicKey) {
+      setSolBalance(null);
+      return;
+    }
     let cancelled = false;
     void (async () => {
       try {

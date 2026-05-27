@@ -156,7 +156,6 @@ export function DappTradeFlowPanel() {
     // a lazy initializer would touch `sessionStorage` during SSR and crash, and
     // skipping the read would leave a logged-in user looking like a fresh one
     // until they touch the form.
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSession(readDappSessionForOwner(connectedOwner));
     const s = readDappSessionForOwner(connectedOwner);
     if (s) {
