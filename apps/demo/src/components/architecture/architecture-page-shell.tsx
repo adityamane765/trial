@@ -12,6 +12,7 @@ export function ArchitecturePageShell() {
 
   const scrollToExplorer = useCallback(() => {
     isProgrammatic.current = true;
+    history.pushState({ view: "explorer" }, "");
     explorerRef.current?.scrollIntoView({ behavior: "smooth" });
     setTimeout(() => { isProgrammatic.current = false; }, 800);
   }, []);
@@ -20,6 +21,18 @@ export function ArchitecturePageShell() {
     isProgrammatic.current = true;
     heroRef.current?.scrollIntoView({ behavior: "smooth" });
     setTimeout(() => { isProgrammatic.current = false; }, 800);
+  }, []);
+
+  useEffect(() => {
+    const onPop = (e: PopStateEvent) => {
+      if (e.state?.view === "explorer") return; // explorer handles its own sections
+      // back from explorer → scroll to hero
+      isProgrammatic.current = true;
+      heroRef.current?.scrollIntoView({ behavior: "smooth" });
+      setTimeout(() => { isProgrammatic.current = false; }, 800);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
   }, []);
 
   useEffect(() => {

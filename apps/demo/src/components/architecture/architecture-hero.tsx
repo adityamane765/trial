@@ -2,30 +2,27 @@
 
 import RichGridBackground from "@/components/architecture/rich-grid-bg";
 
-function ScrollDownButton({ onClick }: { onClick?: () => void }) {
+function DocsButton({ onClick }: { onClick?: () => void }) {
   return (
     <button
       onClick={onClick}
-      aria-label="Scroll down"
-      className="flex items-center justify-center transition-opacity hover:opacity-70"
+      className="inline-flex items-center gap-2 transition-opacity hover:opacity-70"
       style={{
-        width: 36,
-        height: 36,
-        borderRadius: "50%",
-        border: "1px solid rgba(217,104,32,0.4)",
-        background: "rgba(217,104,32,0.07)",
+        fontFamily: "'JetBrains Mono', monospace",
+        fontSize: "10px",
+        letterSpacing: "0.16em",
+        textTransform: "uppercase",
+        color: "#FA7E23",
+        background: "rgba(255,137,29,0.08)",
+        border: "1px solid rgba(255,137,29,0.3)",
+        borderRadius: "2px",
+        padding: "8px 16px",
         cursor: "pointer",
       }}
     >
-      <svg width="14" height="20" viewBox="0 0 14 20" fill="none" aria-hidden="true">
-        <defs>
-          <linearGradient id="arch-scroll-trail" x1="7" y1="0" x2="7" y2="13" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#fa7e23" stopOpacity="0" />
-            <stop offset="100%" stopColor="#fa7e23" stopOpacity="1" />
-          </linearGradient>
-        </defs>
-        <line x1="7" y1="0" x2="7" y2="13" stroke="url(#arch-scroll-trail)" strokeWidth="1.4" strokeLinecap="round" />
-        <path d="M2.5 11l4.5 6 4.5-6" stroke="#fa7e23" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      Docs
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+        <path d="M2 5h6m0 0L5 2m3 3L5 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     </button>
   );
@@ -60,7 +57,7 @@ export function ArchitectureHero({ onScrollDown }: { onScrollDown?: () => void }
             letterSpacing: "-0.045em",
           }}
         >
-          <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "#fa7e23" }}>
+          <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "#FA7E23" }}>
             Dark by default
           </span>
           <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "rgba(245,243,238,0.88)" }}>
@@ -119,28 +116,9 @@ export function ArchitectureHero({ onScrollDown }: { onScrollDown?: () => void }
 
         </div>
 
-        {/* Docs link + scroll button — bottom */}
-        <div className="mt-auto flex items-center justify-between pt-16">
-          <a
-            href="https://github.com/skysail-labs/darknyx/blob/main/docs/ARCHITECTURE.md"
-            style={{
-              fontFamily: "'JetBrains Mono', monospace",
-              fontSize: "10px",
-              letterSpacing: "0.16em",
-              textTransform: "uppercase",
-              color: "rgba(217,104,32,0.65)",
-              textDecoration: "none",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-            }}
-          >
-            docs/architecture.md
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-              <path d="M2 5h6m0 0L5 2m3 3L5 8" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </a>
-          <ScrollDownButton onClick={onScrollDown} />
+        {/* Docs button — bottom */}
+        <div className="mt-auto flex items-center justify-center pt-16">
+          <DocsButton onClick={onScrollDown} />
         </div>
       </div>
     </section>

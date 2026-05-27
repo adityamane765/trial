@@ -1,11 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SystemOverview } from "@/components/architecture/system-overview";
 import { PrivacyTable } from "@/components/architecture/privacy-table";
 import { TransactionFlow } from "@/components/architecture/transaction-flow";
-import { CryptoPrimitives } from "@/components/architecture/crypto-primitives";
-import { SecurityAndRoadmap } from "@/components/architecture/security-and-roadmap";
 
 const SECTIONS = [
   {
@@ -29,20 +27,6 @@ const SECTIONS = [
     sub: "10 transactions · 1 settlement path",
     component: TransactionFlow,
   },
-  {
-    id: "crypto-primitives",
-    index: "04",
-    title: "Crypto Primitives",
-    sub: "Groth16 · Poseidon · BN254",
-    component: CryptoPrimitives,
-  },
-  {
-    id: "security-roadmap",
-    index: "05",
-    title: "Security & Roadmap",
-    sub: "Protections + what's not yet shipped",
-    component: SecurityAndRoadmap,
-  },
 ] as const;
 
 type SectionId = (typeof SECTIONS)[number]["id"];
@@ -52,6 +36,25 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
 
   const activeIdx = active ? SECTIONS.findIndex((s) => s.id === active) : -1;
   const ActiveComponent = active ? SECTIONS[activeIdx].component : null;
+
+  const openSection = (id: SectionId) => {
+    history.pushState({ section: id }, "");
+    setActive(id);
+  };
+
+  const closeSection = () => {
+    history.pushState({ section: null }, "");
+    setActive(null);
+  };
+
+  useEffect(() => {
+    const onPop = (e: PopStateEvent) => {
+      const section = e.state?.section as SectionId | null | undefined;
+      setActive(section ?? null);
+    };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
 
   return (
     <section
@@ -103,7 +106,7 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
           </button>
           {active && (
             <button
-              onClick={() => setActive(null)}
+              onClick={() => closeSection()}
               style={{
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: "9px",
@@ -130,7 +133,7 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
         {/* Right: next section */}
         {active && activeIdx < SECTIONS.length - 1 ? (
           <button
-            onClick={() => setActive(SECTIONS[activeIdx + 1].id)}
+            onClick={() => openSection(SECTIONS[activeIdx + 1].id)}
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: "9px",
@@ -171,31 +174,33 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(5, 1fr)",
+              gridTemplateColumns: "repeat(3, 1fr)",
               height: "100%",
             }}
           >
             {SECTIONS.map((s, idx) => (
               <button
                 key={s.id}
-                onClick={() => setActive(s.id)}
+                onClick={() => openSection(s.id)}
                 style={{
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
                   padding: "40px 32px",
                   background: "transparent",
-                  border: "none",
-                  borderRight: idx < SECTIONS.length - 1 ? "1px solid rgba(255,255,255,0.05)" : "none",
+                  border: "1px solid rgba(250,126,35,0.06)",
+                  borderRight: idx < SECTIONS.length - 1 ? "1px solid rgba(250,126,35,0.06)" : "1px solid rgba(250,126,35,0.06)",
                   cursor: "pointer",
                   textAlign: "left",
-                  transition: "background 0.15s",
+                  transition: "background 0.15s, border-color 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.025)";
+                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(250,126,35,0.04)";
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(250,126,35,0.28)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(250,126,35,0.12)";
                 }}
               >
                 {/* Top: index */}
@@ -245,6 +250,7 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
           ActiveComponent && <ActiveComponent />
         )}
       </div>
+
     </section>
   );
 }

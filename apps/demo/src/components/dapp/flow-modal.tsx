@@ -60,10 +60,7 @@ interface StepContent {
 function useScramble(text: string, active: boolean): string {
   const [display, setDisplay] = useState(text);
   useEffect(() => {
-    if (!active) {
-      setDisplay(text);
-      return;
-    }
+    if (!active) { setDisplay(text); return; }
     let frame = 0;
     const id = setInterval(() => {
       setDisplay(
@@ -97,11 +94,7 @@ function useStepTransition(
   const [scrambled, setScrambled] = useState<string[]>([]);
 
   useEffect(() => {
-    if (!active) {
-      setOpacity(1);
-      setScrambled([]);
-      return;
-    }
+    if (!active) { setOpacity(1); setScrambled([]); return; }
     const totalMs = 900;
     const intervalMs = 40;
     let elapsed = 0;
@@ -149,7 +142,7 @@ function TransitionContent({
       {/* Title — scrambled */}
       <div style={{ height: "28px" }} className="flex items-center">
         <span className="text-[17px] font-bold uppercase tracking-[0.18em]"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#fa7e23" }}>
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#FA7E23" }}>
           {scrambled[0]?.slice(0, title.length) ?? title}
         </span>
       </div>
@@ -170,7 +163,7 @@ function TransitionContent({
 /* -------------------------------------------------------------------------- */
 
 function LogEntry({ line, fresh }: { line: LogLine; fresh: boolean }) {
-  useScramble(`${line.label}: ${line.value}`, fresh);
+  const _ = useScramble(`${line.label}: ${line.value}`, fresh);
   return (
     <div className="flex flex-wrap items-baseline gap-x-2 font-mono text-[11px]" style={{ height: "28px", alignItems: "center" }}>
       <span className="text-[#6b6b74]">{line.label}:</span>
@@ -179,7 +172,7 @@ function LogEntry({ line, fresh }: { line: LogLine; fresh: boolean }) {
           href={line.href}
           target="_blank"
           rel="noreferrer"
-          className="text-[#fa7e23] underline underline-offset-2 hover:text-[#f08040]"
+          className="text-[#FA7E23] underline underline-offset-2 hover:text-[#f08040]"
         >
           {line.value}
         </a>
@@ -235,11 +228,13 @@ function FlowModalInner({
   const [tradeStep, setTradeStep] = useState<
     "idle" | "registered" | "slot_ready" | "deposited" | "order_er" | "matched"
   >("idle");
-  const [, setTradeSession] = useState<DappSessionV1 | null>(null);
+  const [tradeSession, setTradeSession] = useState<DappSessionV1 | null>(null);
   const slotIdxRef = useRef<number | null>(null);
   const depositNoteRef = useRef<{ commitmentHex: string; amount: string } | null>(null);
   const orderCtxRef = useRef<{ orderIdHex: string; expirySlot: string } | null>(null);
-  const depositNonceRef = useRef((BigInt(Date.now()) + 333_333n).toString());
+  const depositNonceRef = useRef(
+    (BigInt(Date.now()) + 333_333n).toString()
+  );
   const tokenMetaRef = useRef<{
     baseDecimals: number;
     quoteDecimals: number;
@@ -558,7 +553,7 @@ function FlowModalInner({
         if (!dn || slotIdxRef.current == null) throw new Error("Missing deposit / slot");
         setTradeLines((p) => [...p, { label: "status", value: "Submitting bid on PER…" }]);
         const baseAtoms = toAtoms(baseAmount, baseDecimals);
-        void BigInt(orderPriceLimitStr); // validate parseable
+        const priceLim = BigInt(orderPriceLimitStr);
         const trading = Keypair.fromSecretKey(bs58.decode(s.tradingSecretKeyBase58));
         const now = await l1.getSlot("confirmed");
         const expiry = BigInt(now) + 500n;
@@ -656,7 +651,7 @@ function FlowModalInner({
       setTradeError(e instanceof Error ? e.message : String(e));
       setTradeBusy(false);
     }
-  }, [connectedOwner, tradeStep, forwarder, l1, er]);
+  }, [connectedOwner, tradeStep, forwarder, l1]);
 
   /* ------------------------------------------------------------------------ */
   /* STEP 3: PRIVATE DEPOSIT/WITHDRAW                                         */
@@ -960,14 +955,14 @@ function FlowModalInner({
                   fontFamily: "'JetBrains Mono', monospace",
                   color:
                     currentStep === s
-                      ? "#fa7e23"
+                      ? "#FA7E23"
                       : (s === "trade" && !identityDone) || (s === "deposit" && !tradeDone)
                         ? "rgba(107,107,116,0.4)"
                         : "rgba(107,107,116,0.8)",
-                  borderBottom: currentStep === s ? "1px solid #fa7e23" : "1px solid transparent",
+                  borderBottom: currentStep === s ? "1px solid #FA7E23" : "1px solid transparent",
                 }}
               >
-                <span style={{ color: currentStep === s ? "#fa7e23" : "rgba(107,107,116,0.5)" }}>
+                <span style={{ color: currentStep === s ? "#FA7E23" : "rgba(107,107,116,0.5)" }}>
                   {i + 1}.
                 </span>
                 {s === "identity" ? "Identity" : s === "trade" ? "Trade" : "Deposit"}
@@ -1009,7 +1004,7 @@ function FlowModalInner({
           {/* Title */}
           <div style={{ height: "28px" }} className="flex items-center">
             <span className="text-[17px] font-bold uppercase tracking-[0.18em]"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#fa7e23" }}>
+              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#FA7E23" }}>
               {stepContent.title}
             </span>
           </div>
@@ -1095,7 +1090,7 @@ function FlowModalInner({
                 fontFamily: "'JetBrains Mono', monospace",
                 background: "rgba(217,104,32,0.12)",
                 border: "1px solid rgba(217,104,32,0.3)",
-                color: "#fa7e23",
+                color: "#FA7E23",
               }}
             >
               Trade again →
@@ -1109,7 +1104,7 @@ function FlowModalInner({
                 fontFamily: "'JetBrains Mono', monospace",
                 background: stepContent.busy ? "rgba(217,104,32,0.08)" : "rgba(217,104,32,0.15)",
                 border: "1px solid rgba(217,104,32,0.35)",
-                color: stepContent.busy ? "rgba(217,104,32,0.5)" : "#fa7e23",
+                color: stepContent.busy ? "rgba(217,104,32,0.5)" : "#FA7E23",
                 cursor: stepContent.busy ? "not-allowed" : "pointer",
               }}
             >

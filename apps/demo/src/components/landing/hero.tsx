@@ -89,19 +89,19 @@ function ScrollDownButton() {
         borderRadius: "50%",
         border: "1px solid rgba(217,104,32,0.45)",
         background: "rgba(217,104,32,0.08)",
-        color: "#fa7e23",
+        color: "#FA7E23",
         cursor: "pointer",
       }}
     >
       <svg width="16" height="22" viewBox="0 0 16 22" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="scroll-btn-trail" x1="8" y1="0" x2="8" y2="14" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#fa7e23" stopOpacity="0" />
-            <stop offset="100%" stopColor="#fa7e23" stopOpacity="1" />
+            <stop offset="0%" stopColor="#FA7E23" stopOpacity="0" />
+            <stop offset="100%" stopColor="#FA7E23" stopOpacity="1" />
           </linearGradient>
         </defs>
         <line x1="8" y1="0" x2="8" y2="14" stroke="url(#scroll-btn-trail)" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M3 12l5 6 5-6" stroke="#fa7e23" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M3 12l5 6 5-6" stroke="#FA7E23" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       </svg>
     </button>
   );
@@ -126,7 +126,7 @@ export function LandingHero() {
           {/* Centered text block */}
           {/* <div className="min-w-0">
             <h1 style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 600, letterSpacing: "-0.02em", lineHeight: 1.5 }}>
-              <span style={{ display: "block", color: "#fa7e23" }}>Settle in the dark</span>
+              <span style={{ display: "block", color: "#FA7E23" }}>Settle in the dark</span>
               <span style={{ display: "block", color: "rgba(174,172,176,0.45)", marginTop: "6px" }}>Prove in the light</span>
             </h1>
             <p className="mt-3"

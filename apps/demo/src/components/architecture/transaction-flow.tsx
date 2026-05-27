@@ -76,7 +76,7 @@ export function TransactionFlow() {
               <div key={row.step} style={{ flex: 1, display: "grid", gridTemplateColumns: "44px 60px 1fr 120px 1fr", borderTop: idx > 0 ? "1px solid rgba(255,255,255,0.04)" : "none", borderBottom: idx === FLOW.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", background: row.cluster === "TEE" ? "rgba(217,104,32,0.02)" : "transparent", alignItems: "center" }}>
                 <div style={{ padding: "0 14px", fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.18)", fontWeight: 600 }}>{row.step}</div>
                 <div style={{ padding: "0 14px" }}>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "8px", letterSpacing: "0.12em", textTransform: "uppercase", padding: "2px 5px", border: `1px solid ${row.cluster === "L1" ? "rgba(95,184,95,0.35)" : "rgba(217,104,32,0.4)"}`, color: row.cluster === "L1" ? "rgba(95,184,95,0.8)" : "#fa7e23", borderRadius: "2px" }}>{row.cluster}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "8px", letterSpacing: "0.12em", textTransform: "uppercase", padding: "2px 5px", border: `1px solid ${row.cluster === "L1" ? "rgba(95,184,95,0.35)" : "rgba(217,104,32,0.4)"}`, color: row.cluster === "L1" ? "rgba(95,184,95,0.8)" : "#FA7E23", borderRadius: "2px" }}>{row.cluster}</span>
                 </div>
                 <div style={{ padding: "0 14px" }}>
                   <code style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10.5px", color: "rgba(245,243,238,0.72)" }}>{row.ix}</code>

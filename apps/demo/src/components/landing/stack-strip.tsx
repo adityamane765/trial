@@ -19,14 +19,14 @@ export function StackStrip() {
     <section className="border-t py-14" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
       <div className="mx-auto max-w-6xl px-5 sm:px-7">
         <div className="flex items-baseline justify-between">
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#fa7e23" }}>Built on</span>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#FA7E23" }}>Built on</span>
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: "rgba(174,172,176,0.4)" }}>v1 · devnet</span>
         </div>
         <ul className="mt-5 grid grid-cols-2 gap-x-4 gap-y-3 sm:grid-cols-4">
           {STACK.map((s) => (
             <li
               key={s.label}
-              className="group flex flex-col gap-0.5 pl-3 transition-colors hover:border-[#fa7e23]/60"
+              className="group flex flex-col gap-0.5 pl-3 transition-colors hover:border-[#FA7E23]/60"
               style={{ borderLeft: "1px solid rgba(255,255,255,0.06)" }}
             >
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", fontWeight: 500, color: "rgba(245,243,238,0.8)" }}>{s.label}</span>

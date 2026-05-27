@@ -1,6 +1,6 @@
 "use client";
 
-const orange = "#fa7e23";
+const orange = "#FA7E23";
 const green = "#5fb85f";
 
 const FEATURES = [
@@ -80,7 +80,7 @@ export function FeatureGrid() {
 
               {/* dark gradient overlay so text stays readable */}
               <div className="absolute inset-0 pointer-events-none"
-                style={{ background: "linear-gradient(135deg, rgba(5,5,6,0.88) 30%, rgba(5,5,6,0.15) 100%)" }} />
+                style={{ background: "linear-gradient(135deg, rgba(5,5,6,0.72) 18%, rgba(5,5,6,0.05) 100%)" }} />
 
               {/* top row */}
               <div className="relative z-10 flex items-center justify-between">

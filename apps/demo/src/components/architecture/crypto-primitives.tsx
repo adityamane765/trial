@@ -1,7 +1,7 @@
 const GROUPS = [
   {
     label: "Cryptography",
-    color: "#fa7e23",
+    color: "#FA7E23",
     items: [
       { name: "Groth16 / BN254",          detail: "ZK proof system · VALID_WALLET_CREATE · VALID_SPEND · VALID_MATCH_BATCH" },
       { name: "Poseidon2",                 detail: "In-circuit hash · note commitments · nullifiers · depth-20 Merkle tree" },
