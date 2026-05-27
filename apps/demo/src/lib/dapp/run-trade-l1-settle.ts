@@ -1,4 +1,4 @@
-import { Connection, Keypair, PublicKey } from "@solana/web3.js";
+import type { Connection, Keypair, PublicKey } from "@solana/web3.js";
 
 export interface TradeL1SettleContext {
   l1: Connection;
@@ -17,8 +17,6 @@ export interface TradeL1SettleContext {
   makerNoteCommitment: Uint8Array;
   makerOrderId: Uint8Array;
   makerExpirySlot: bigint;
-  settleLookupTable: PublicKey;
-  repoRoot: string;
 }
 
 export interface TradeL1SettleResult {
