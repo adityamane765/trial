@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useRef } from "react";
 
-import { AsciiHeroBanner } from "@/components/landing/ascii-hero-banner";
+import { LandingHeroCopy } from "@/components/landing/hero-copy";
 
 function PerspectiveGrid() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -87,21 +86,21 @@ function ScrollDownButton() {
         width: 40,
         height: 40,
         borderRadius: "50%",
-        border: "1px solid rgba(217,104,32,0.45)",
-        background: "rgba(217,104,32,0.08)",
-        color: "#FA7E23",
+        border: "1px solid oklch(0.62 0.14 260 / 0.45)",
+        background: "var(--nyx-accent-soft)",
+        color: "var(--nyx-accent)",
         cursor: "pointer",
       }}
     >
       <svg width="16" height="22" viewBox="0 0 16 22" fill="none" aria-hidden="true">
         <defs>
           <linearGradient id="scroll-btn-trail" x1="8" y1="0" x2="8" y2="14" gradientUnits="userSpaceOnUse">
-            <stop offset="0%" stopColor="#FA7E23" stopOpacity="0" />
-            <stop offset="100%" stopColor="#FA7E23" stopOpacity="1" />
+            <stop offset="0%" stopColor="var(--nyx-accent)" stopOpacity="0" />
+            <stop offset="100%" stopColor="var(--nyx-accent)" stopOpacity="1" />
           </linearGradient>
         </defs>
         <line x1="8" y1="0" x2="8" y2="14" stroke="url(#scroll-btn-trail)" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M3 12l5 6 5-6" stroke="#FA7E23" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+        <path d="M3 12l5 6 5-6" stroke="var(--nyx-accent)" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
       </svg>
     </button>
   );
@@ -114,43 +113,14 @@ export function LandingHero() {
       style={{ borderColor: "rgba(255,255,255,0.06)", height: "calc(100dvh - 44px)", display: "flex", flexDirection: "column" }}
     >
 
-      {/* ASCII banner — true full-bleed, no horizontal padding */}
-      <div className="nyx-rise nyx-rise-delay-1 w-full mt-16 flex-1 min-h-0">
-        <AsciiHeroBanner contained />
-      </div>
-
-      {/* Bottom row — centered */}
-      <div className="nyx-rise nyx-rise-delay-2 w-full px-5 sm:px-7 pt-10 pb-16 flex justify-center">
-        <div className="text-center">
-
-          {/* Centered text block */}
-          {/* <div className="min-w-0">
-            <h1 style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "clamp(22px, 3vw, 36px)", fontWeight: 600, letterSpacing: "-0.02em", lineHeight: 1.5 }}>
-              <span style={{ display: "block", color: "#FA7E23" }}>Settle in the dark</span>
-              <span style={{ display: "block", color: "rgba(174,172,176,0.45)", marginTop: "6px" }}>Prove in the light</span>
-            </h1>
-            <p className="mt-3"
-              style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "11.5px", lineHeight: 1.8, color: "rgba(174,172,176,0.5)" }}>
-              Private orderbook on Solana
-            </p>
-          </div> */}
-
-          {/* buttons removed */}
-          <div className="flex flex-col gap-2 shrink-0 sm:items-end self-end">
-            <Link
-              href="/landing"
-              className="inline-flex items-center justify-center px-6 py-3 text-[11px] font-semibold uppercase tracking-[0.14em] transition"
-            >
-            </Link>
-            {/* <Link
-              href="/architecture"
-              className="inline-flex items-center justify-center px-6 py-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition"
-              style={{ fontFamily: "'JetBrains Mono', monospace", border: "1px solid rgba(255,255,255,0.1)", color: "#aeacb0", borderRadius: "2px", minWidth: "160px" }}
-            >
-              Architecture
-            </Link> */}
-          </div>
-
+      {/* Hero copy — replaces ASCII banner */}
+      <div className="nyx-rise nyx-rise-delay-1 relative flex w-full flex-1 min-h-0 flex-col justify-center pr-5 pl-12 sm:pr-7 sm:pl-16 lg:pr-12 lg:pl-24 xl:pl-32">
+        <div
+          className="pointer-events-none absolute inset-0 nyx-grid opacity-60"
+          aria-hidden
+        />
+        <div className="relative pt-8 pb-24 sm:pt-12">
+          <LandingHeroCopy />
         </div>
       </div>
 

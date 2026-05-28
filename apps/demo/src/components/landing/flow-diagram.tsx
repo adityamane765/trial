@@ -1,36 +1,10 @@
 "use client";
 
-interface Stage {
-  id: string;
-  cluster: "L1" | "TEE" | "L1 + TEE";
-  title: string;
-  body: string;
-  primitives: string[];
-}
+import Link from "next/link";
 
-const STAGES: Stage[] = [
-  {
-    id: "1",
-    cluster: "L1",
-    title: "Identity & deposit",
-    body: "Sign a deterministic seed in your wallet, prove VALID_WALLET_CREATE in the browser, and shield SPL tokens into the vault as a UTXO note.",
-    primitives: ["Phantom signMessage", "VALID_WALLET_CREATE", "vault::deposit"],
-  },
-  {
-    id: "2",
-    cluster: "TEE",
-    title: "Submit & match privately",
-    body: "Your trading key signs an order into the Intel TDX enclave over RA-TLS. The TEE runs a frequent batch auction every 2 s. L1 never sees individual order intent.",
-    primitives: ["POST /orders", "run_batch", "VALID_MATCH_BATCH"],
-  },
-  {
-    id: "3",
-    cluster: "L1 + TEE",
-    title: "Settle & withdraw",
-    body: "The TEE submits a Groth16 batch proof and settles atomically on L1, locking input notes and appending output notes. Withdraw anytime with a fresh VALID_SPEND proof.",
-    primitives: ["verify_match_batch", "tee_forced_settle_batched", "VALID_SPEND"],
-  },
-];
+import { flow } from "@/components/landing/landing-copy";
+
+const accent = "var(--nyx-accent)";
 
 export function FlowDiagram() {
   return (
@@ -39,29 +13,37 @@ export function FlowDiagram() {
       style={{
         borderColor: "rgba(255,255,255,0.06)",
         backgroundColor: "#050505",
-        backgroundImage: "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
+        backgroundImage: "radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)",
         backgroundSize: "18px 18px",
-        height: "100dvh",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
       }}
     >
-      <div className="mx-auto w-full max-w-6xl px-5 sm:px-7 flex flex-col gap-0">
-        <div className="flex flex-col items-start gap-2">
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#FA7E23" }}>
-            How a private trade flows
+      <div className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-7 sm:py-16">
+        <div className="flex max-w-2xl flex-col items-start gap-2">
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.18em]"
+            style={{ color: accent }}
+          >
+            {flow.eyebrow}
           </span>
-          <h2 className="max-w-3xl leading-tight" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "clamp(18px, 2.2vw, 28px)", fontWeight: 600, letterSpacing: "-0.02em" }}>
-            <span style={{ color: "rgba(245,243,238,0.9)" }}>Three stages. Two clusters.</span>
+          <h2
+            className="font-mono font-semibold leading-tight tracking-[-0.02em]"
+            style={{ fontSize: "clamp(18px, 2.2vw, 28px)" }}
+          >
+            <span style={{ color: "rgba(245,243,238,0.9)" }}>{flow.title}</span>
             <br />
-            <span style={{ color: "rgba(174,172,176,0.55)" }}>One verifiable settlement.</span>
+            <span style={{ color: "rgba(174,172,176,0.55)" }}>{flow.titleMuted}</span>
           </h2>
+          <p
+            className="mt-3 max-w-xl font-mono text-[12px] leading-[1.85]"
+            style={{ color: "rgba(174,172,176,0.55)" }}
+          >
+            {flow.lede}
+          </p>
         </div>
 
-        <ol className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-          {STAGES.map((s, idx) => (
-            <li key={s.id} className="relative">
+        <ol className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+          {flow.stages.map((s, idx) => (
+            <li key={s.title}>
               <div
                 className={`group h-full p-6 transition-all duration-500 nyx-rise nyx-rise-delay-${idx + 1}`}
                 style={{
@@ -72,52 +54,50 @@ export function FlowDiagram() {
                   boxShadow: "0 0 0 1px rgba(255,255,255,0.02) inset",
                 }}
               >
-                <div className="flex items-center justify-between">
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "20px", lineHeight: 1, color: "#FA7E23" }}>
-                    0{s.id}
-                  </span>
-                  <span
-                    className={`rounded-full border px-3 py-1 font-mono text-[10px] uppercase tracking-[0.16em] ${
-                      s.cluster === "L1"
-                        ? "border-nyx-signal-green/40 text-nyx-signal-green"
-                        : s.cluster === "TEE"
-                        ? "border-[#FA7E23]/50 text-[#FA7E23]"
-                        : "border-nyx-signal-amber/45 text-nyx-signal-amber"
-                    }`}
-                  >
-                    {s.cluster}
-                  </span>
-                </div>
-                <h3 className="mt-4 leading-snug" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "14px", fontWeight: 600, color: "rgba(245,243,238,0.9)" }}>
+                <span
+                  className="font-mono text-[20px] leading-none"
+                  style={{ color: accent }}
+                >
+                  0{idx + 1}
+                </span>
+                <h3
+                  className="mt-4 font-mono text-[14px] font-semibold leading-snug"
+                  style={{ color: "rgba(245,243,238,0.9)" }}
+                >
                   {s.title}
                 </h3>
-                <p className="mt-2" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10.5px", lineHeight: "1.75", color: "rgba(174,172,176,0.58)" }}>
+                <p
+                  className="mt-3 font-mono text-[11.5px] leading-[1.8]"
+                  style={{ color: "rgba(174,172,176,0.58)" }}
+                >
                   {s.body}
                 </p>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {s.primitives.map((p) => (
-                    <code key={p} className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 font-mono text-[10px] text-nyx-fog">
-                      {p}
-                    </code>
-                  ))}
-                </div>
               </div>
             </li>
           ))}
         </ol>
 
-        <div className="mt-8 h-px w-full bg-white/[0.06]" />
+        <div className="mt-10 h-px w-full bg-white/[0.06]" />
 
         <div className="mt-6 flex flex-wrap items-end justify-between gap-6">
-          <p className="max-w-xl text-[12px] text-nyx-fog">
-            Want to see every PDA, every cryptographic primitive, and every instruction the on-chain programs accept?
+          <p className="max-w-xl font-mono text-[12px] leading-[1.75] text-nyx-fog">
+            {flow.footnote}
           </p>
-          <a href="/architecture" className="inline-flex items-center gap-2 text-[12px] font-semibold uppercase tracking-[0.14em] text-nyx-fog transition hover:text-[#FA7E23]">
+          <Link
+            href="/architecture"
+            className="inline-flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-nyx-fog transition hover:text-[var(--nyx-accent)]"
+          >
             Architecture deep-dive
             <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
-              <path d="M2 5.5h7m0 0L5.5 2m3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M2 5.5h7m0 0L5.5 2m3.5 3.5L5.5 9"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

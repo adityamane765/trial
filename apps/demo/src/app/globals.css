@@ -273,13 +273,13 @@ body {
   animation: nyx-scanline 2.4s linear infinite;
 }
 
-/* Wallet adapter button — override purple with orange theme */
+/* Wallet adapter button — override purple with official Cobalt accent */
 button.wallet-adapter-button,
 button.wallet-adapter-button-trigger {
-  background: rgba(217,104,32,0.15) !important;
-  background-color: rgba(217,104,32,0.15) !important;
-  border: 1px solid rgba(217,104,32,0.35) !important;
-  color: #fa7e23 !important;
+  background: var(--nyx-accent-soft) !important;
+  background-color: var(--nyx-accent-soft) !important;
+  border: 1px solid oklch(0.62 0.14 260 / 0.35) !important;
+  color: var(--nyx-accent) !important;
   font-family: 'JetBrains Mono', monospace !important;
   font-size: 11px !important;
   font-weight: 600 !important;
@@ -292,8 +292,8 @@ button.wallet-adapter-button-trigger {
 }
 button.wallet-adapter-button:hover:not([disabled]),
 button.wallet-adapter-button-trigger:hover:not([disabled]) {
-  background: rgba(217,104,32,0.28) !important;
-  background-color: rgba(217,104,32,0.28) !important;
+  background: oklch(0.62 0.14 260 / 0.28) !important;
+  background-color: oklch(0.62 0.14 260 / 0.28) !important;
 }
 button.wallet-adapter-button .wallet-adapter-button-start-icon,
 button.wallet-adapter-button-trigger .wallet-adapter-button-start-icon {
@@ -301,7 +301,7 @@ button.wallet-adapter-button-trigger .wallet-adapter-button-start-icon {
 }
 .wallet-adapter-modal-wrapper {
   background: #0d0f12 !important;
-  border: 1px solid rgba(217,104,32,0.18) !important;
+  border: 1px solid var(--nyx-accent-soft) !important;
 }
 .wallet-adapter-modal-title {
   color: #c8b898 !important;
@@ -318,4 +318,78 @@ button.wallet-adapter-button-trigger .wallet-adapter-button-start-icon {
   .nyx-drift,
   .nyx-aurora,
   .nyx-scanline::after { animation: none !important; }
+}
+
+/* ==========================================================================
+   Design Regime Color Enforcement (Global Orange-to-Cobalt Migration)
+   ========================================================================== */
+
+/* Orange text and colors -> Cobalt */
+[style*="#FA7E23"], [style*="#fa7e23"], 
+[style*="rgb(250, 126, 35)"], [style*="rgb(250,126,35)"],
+[style*="rgba(250, 126, 35"], [style*="rgba(250,126,35"] {
+  color: var(--nyx-accent) !important;
+}
+[style*="#FA7E23"], [style*="#fa7e23"], 
+[style*="rgb(250, 126, 35)"], [style*="rgb(250,126,35)"] {
+  stroke: var(--nyx-accent) !important;
+  fill: var(--nyx-accent) !important;
+}
+
+/* Orange borders -> Cobalt borders */
+[style*="rgba(217, 104, 32, 0.2)"], [style*="rgba(217,104,32,0.2)"],
+[style*="rgba(217, 104, 32, 0.22)"], [style*="rgba(217,104,32,0.22)"],
+[style*="rgba(217, 104, 32, 0.4)"], [style*="rgba(217,104,32,0.4)"],
+[style*="rgba(217, 104, 32, 0.45)"], [style*="rgba(217,104,32,0.45)"] {
+  border-color: oklch(0.62 0.14 260 / 0.25) !important;
+}
+
+/* Special Button backgrounds and borders */
+[style*="rgba(255, 137, 29"], [style*="rgba(255,137,29"] {
+  color: var(--nyx-accent) !important;
+  background: var(--nyx-accent-soft) !important;
+  background-color: var(--nyx-accent-soft) !important;
+  border-color: oklch(0.62 0.14 260 / 0.3) !important;
+}
+
+/* Soft orange backgrounds -> Soft cobalt backgrounds */
+[style*="rgba(217, 104, 32, 0.1)"], [style*="rgba(217,104,32,0.1)"],
+[style*="rgba(217, 104, 32, 0.18)"], [style*="rgba(217,104,32,0.18)"],
+[style*="rgba(217, 104, 32, 0.08)"], [style*="rgba(217,104,32,0.08)"],
+[style*="rgba(217, 104, 32, 0.12)"], [style*="rgba(217,104,32,0.12)"],
+[style*="rgba(217, 104, 32, 0.15)"], [style*="rgba(217,104,32,0.15)"],
+[style*="rgba(217, 104, 32, 0.06)"], [style*="rgba(217,104,32,0.06)"],
+[style*="rgba(217, 104, 32, 0.02)"], [style*="rgba(217,104,32,0.02)"] {
+  background-color: var(--nyx-accent-soft) !important;
+}
+
+/* Soft orange text opacity variants -> Soft cobalt text */
+[style*="rgba(217, 104, 32, 0.8)"], [style*="rgba(217,104,32,0.8)"] {
+  color: oklch(0.62 0.14 260 / 0.8) !important;
+}
+[style*="rgba(217, 104, 32, 0.75)"], [style*="rgba(217,104,32,0.75)"] {
+  color: oklch(0.62 0.14 260 / 0.75) !important;
+}
+[style*="rgba(217, 104, 32, 0.7)"], [style*="rgba(217,104,32,0.7)"] {
+  color: oklch(0.62 0.14 260 / 0.7) !important;
+}
+[style*="rgba(217, 104, 32, 0.6)"], [style*="rgba(217,104,32,0.6)"] {
+  color: oklch(0.62 0.14 260 / 0.6) !important;
+}
+[style*="rgba(217, 104, 32, 0.5)"], [style*="rgba(217,104,32,0.5)"] {
+  color: oklch(0.62 0.14 260 / 0.5) !important;
+}
+[style*="rgba(217, 104, 32, 0.45)"], [style*="rgba(217,104,32,0.45)"] {
+  color: oklch(0.62 0.14 260 / 0.45) !important;
+}
+[style*="rgba(217, 104, 32, 0.4)"], [style*="rgba(217,104,32,0.4)"] {
+  color: oklch(0.62 0.14 260 / 0.4) !important;
+}
+
+/* Svg strokes and fills */
+[style*="stroke: rgba(217, 104, 32"], [style*="stroke: rgba(217,104,32"] {
+  stroke: var(--nyx-accent-soft) !important;
+}
+[style*="fill: rgba(217, 104, 32"], [style*="fill: rgba(217,104,32"] {
+  fill: var(--nyx-accent-soft) !important;
 }

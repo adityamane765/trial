@@ -47,7 +47,7 @@ export function NyxNav({ tone = "ink", launchHref = "/dapp", active = null }: Ny
                 letterSpacing: "0.14em",
                 textTransform: "uppercase",
                 color: active === l.key
-                  ? (isInk ? "#FA7E23" : "var(--nyx-ink)")
+                  ? (isInk ? "var(--nyx-accent)" : "var(--nyx-ink)")
                   : (isInk ? "rgba(174,172,176,0.7)" : "var(--nyx-slate)"),
               }}
             >
@@ -57,9 +57,8 @@ export function NyxNav({ tone = "ink", launchHref = "/dapp", active = null }: Ny
         </nav>
 
         {launchHref ? (
-          <Link
-            href="/landing"
-            className="group inline-flex items-center gap-2 transition-opacity hover:opacity-80"
+          <div
+            className="inline-flex items-center gap-2 select-none"
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: "11px",
@@ -68,29 +67,13 @@ export function NyxNav({ tone = "ink", launchHref = "/dapp", active = null }: Ny
               textTransform: "uppercase",
               padding: "6px 14px",
               borderRadius: "2px",
-              background: "rgba(217,104,32,0.15)",
-              border: "1px solid rgba(217,104,32,0.35)",
-              color: "#FA7E23",
+              background: "var(--nyx-accent-soft)",
+              border: "1px solid oklch(0.62 0.14 260 / 0.35)",
+              color: "var(--nyx-accent)",
             }}
           >
             <span>Coming Soon on Mainnet</span>
-            {/* <svg
-              width="10"
-              height="10"
-              viewBox="0 0 11 11"
-              fill="none"
-              className="transition-transform group-hover:translate-x-0.5"
-              aria-hidden="true"
-            >
-              <path
-                d="M2 5.5h7m0 0L5.5 2m3.5 3.5L5.5 9"
-                stroke="currentColor"
-                strokeWidth="1.4"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg> */}
-          </Link>
+          </div>
         ) : (
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(174,172,176,0.5)" }}>
             devnet

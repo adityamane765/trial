@@ -23,7 +23,7 @@ export function ProofQuote() {
             fontWeight: 700,
             lineHeight: 0.9,
             letterSpacing: "-0.05em",
-            color: "#FA7E23",
+            color: "var(--nyx-accent)",
           }}>
             N=16
           </div>
@@ -69,11 +69,11 @@ export function ProofQuote() {
               <ellipse cx="420" cy="600" rx="560" ry="180" transform="rotate(-24 420 600)"
                 stroke="rgba(255,255,255,0.24)" strokeWidth="1.6" strokeDasharray="12 12" />
               <path d="M 120 720 L 280 540 L 280 420 L 360 420 L 360 620 L 260 720"
-                fill="none" stroke="rgba(217,104,32,0.18)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M 280 420 L 360 420" fill="none" stroke="#FA7E23" strokeWidth="2" strokeLinecap="round" filter="url(#orangeGlow-proof)" />
-              <circle r="4" fill="#FA7E23" cx="320" cy="470" />
+                fill="none" stroke="oklch(0.62 0.14 260 / 0.18)" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M 280 420 L 360 420" fill="none" stroke="var(--nyx-accent)" strokeWidth="2" strokeLinecap="round" filter="url(#cobaltGlow-proof)" />
+              <circle r="4" fill="var(--nyx-accent)" cx="320" cy="470" />
               <defs>
-                <filter id="orangeGlow-proof">
+                <filter id="cobaltGlow-proof">
                   <feGaussianBlur stdDeviation="4" result="blur" />
                   <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
                 </filter>

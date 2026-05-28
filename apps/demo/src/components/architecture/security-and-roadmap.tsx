@@ -20,7 +20,7 @@ export function SecurityAndRoadmap() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.05)", flexShrink: 0 }}>
         <div style={{ padding: "8px 32px" }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(217,104,32,0.8)" }}>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "oklch(0.62 0.14 260 / 0.8)" }}>
             05–06 · Security + Roadmap
           </span>
         </div>

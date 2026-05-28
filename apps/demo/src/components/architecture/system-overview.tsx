@@ -31,9 +31,9 @@ const LAYERS: Layer[] = [
 ];
 
 const clusterColor = (c: string) =>
-  c === "L1" ? "rgba(95,184,95,0.8)" : c === "TEE" ? "#FA7E23" : "rgba(174,172,176,0.6)";
+  c === "L1" ? "rgba(95,184,95,0.8)" : c === "TEE" ? "var(--nyx-accent)" : "rgba(174,172,176,0.6)";
 const clusterBorder = (c: string) =>
-  c === "L1" ? "rgba(95,184,95,0.35)" : c === "TEE" ? "rgba(217,104,32,0.45)" : "rgba(174,172,176,0.25)";
+  c === "L1" ? "rgba(95,184,95,0.35)" : c === "TEE" ? "oklch(0.62 0.14 260 / 0.45)" : "rgba(174,172,176,0.25)";
 
 export function SystemOverview() {
   return (
@@ -41,7 +41,7 @@ export function SystemOverview() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 0, borderBottom: "1px solid rgba(255,255,255,0.05)", flexShrink: 0 }}>
         <div style={{ padding: "8px 32px", borderRight: "1px solid rgba(255,255,255,0.05)" }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(217,104,32,0.8)" }}>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "oklch(0.62 0.14 260 / 0.8)" }}>
             01 · System overview
           </span>
         </div>

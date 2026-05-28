@@ -25,7 +25,7 @@ export function TransactionFlow() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", borderBottom: "1px solid rgba(255,255,255,0.05)", flexShrink: 0 }}>
         <div style={{ padding: "8px 32px", borderRight: "1px solid rgba(255,255,255,0.05)" }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "rgba(217,104,32,0.8)" }}>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "9px", letterSpacing: "0.22em", textTransform: "uppercase", color: "oklch(0.62 0.14 260 / 0.8)" }}>
             03 · End-to-end flow
           </span>
         </div>
@@ -52,7 +52,7 @@ export function TransactionFlow() {
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
             {[
               { color: "rgba(95,184,95,0.45)", label: "L1 — Solana", text: "rgba(95,184,95,0.6)" },
-              { color: "rgba(217,104,32,0.45)", label: "TEE — Intel TDX", text: "rgba(217,104,32,0.6)" },
+              { color: "oklch(0.62 0.14 260 / 0.45)", label: "TEE — Intel TDX", text: "oklch(0.62 0.14 260 / 0.6)" },
             ].map((l) => (
               <div key={l.label} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                 <div style={{ height: "1px", width: "20px", background: l.color }} />
@@ -73,16 +73,16 @@ export function TransactionFlow() {
           {/* Rows */}
           <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden" }}>
             {FLOW.map((row, idx) => (
-              <div key={row.step} style={{ flex: 1, display: "grid", gridTemplateColumns: "44px 60px 1fr 120px 1fr", borderTop: idx > 0 ? "1px solid rgba(255,255,255,0.04)" : "none", borderBottom: idx === FLOW.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", background: row.cluster === "TEE" ? "rgba(217,104,32,0.02)" : "transparent", alignItems: "center" }}>
+              <div key={row.step} style={{ flex: 1, display: "grid", gridTemplateColumns: "44px 60px 1fr 120px 1fr", borderTop: idx > 0 ? "1px solid rgba(255,255,255,0.04)" : "none", borderBottom: idx === FLOW.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none", background: row.cluster === "TEE" ? "oklch(0.62 0.14 260 / 0.03)" : "transparent", alignItems: "center" }}>
                 <div style={{ padding: "0 14px", fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: "rgba(255,255,255,0.18)", fontWeight: 600 }}>{row.step}</div>
                 <div style={{ padding: "0 14px" }}>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "8px", letterSpacing: "0.12em", textTransform: "uppercase", padding: "2px 5px", border: `1px solid ${row.cluster === "L1" ? "rgba(95,184,95,0.35)" : "rgba(217,104,32,0.4)"}`, color: row.cluster === "L1" ? "rgba(95,184,95,0.8)" : "#FA7E23", borderRadius: "2px" }}>{row.cluster}</span>
+                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "8px", letterSpacing: "0.12em", textTransform: "uppercase", padding: "2px 5px", border: `1px solid ${row.cluster === "L1" ? "rgba(95,184,95,0.35)" : "oklch(0.62 0.14 260 / 0.4)"}`, color: row.cluster === "L1" ? "rgba(95,184,95,0.8)" : "var(--nyx-accent)", borderRadius: "2px" }}>{row.cluster}</span>
                 </div>
                 <div style={{ padding: "0 14px" }}>
                   <code style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "10.5px", color: "rgba(245,243,238,0.72)" }}>{row.ix}</code>
                 </div>
                 <div style={{ padding: "0 14px", fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: "rgba(174,172,176,0.4)" }}>{row.signer}</div>
-                <div style={{ padding: "0 14px", fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: row.privacy.startsWith("HIDDEN") ? "rgba(217,104,32,0.75)" : "rgba(174,172,176,0.4)", lineHeight: 1.4 }}>{row.privacy}</div>
+                <div style={{ padding: "0 14px", fontFamily: "'JetBrains Mono', monospace", fontSize: "10px", color: row.privacy.startsWith("HIDDEN") ? "oklch(0.62 0.14 260 / 0.75)" : "rgba(174,172,176,0.4)", lineHeight: 1.4 }}>{row.privacy}</div>
               </div>
             ))}
           </div>

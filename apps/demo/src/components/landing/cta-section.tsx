@@ -1,26 +1,49 @@
 import Link from "next/link";
 
 import { NyxMark } from "@/components/brand/nyx-mark";
+import { cta } from "@/components/landing/landing-copy";
 
 export function CtaSection() {
   return (
-    <section className="relative isolate border-t py-24" style={{ borderColor: "rgba(255,255,255,0.06)" }}>
+    <section
+      className="relative isolate border-t py-20 sm:py-24"
+      style={{ borderColor: "rgba(255,255,255,0.06)" }}
+    >
       <div className="mx-auto max-w-5xl px-5 text-center sm:px-7">
-        <NyxMark size={56} className="mx-auto nyx-drift" style={{ color: "#FA7E23" }} />
-        <h2 className="mt-7 leading-tight" style={{ fontFamily: "'JetBrains Mono', monospace", fontWeight: 600, letterSpacing: "-0.02em" }}>
-          <span style={{  fontSize: "clamp(24px, 3.5vw, 40px)", color: "#FA7E23" }}>Soon live on Mainnet</span>
-          <br />
-          <span style={{  fontSize: "clamp(24px, 3vw, 35px)", color: "rgba(174,172,176,0.5)" }}>Privacy without sacrificing auditability</span>
-        </h2>
-        <p className="mx-auto mt-5 max-w-xl" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", lineHeight: "1.8", color: "rgba(174,172,176,0.55)" }}>
-        </p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          {/* <Link
-            href="/dapp"
-            className="group inline-flex items-center gap-2 rounded-sm px-6 py-3.5 text-[12px] font-semibold uppercase tracking-[0.14em] transition"
-            style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(217,104,32,0.18)", border: "1px solid rgba(217,104,32,0.4)", color: "#FA7E23" }}
+        <NyxMark size={56} className="mx-auto nyx-drift" style={{ color: "var(--nyx-accent)" }} />
+        <h2
+          className="mt-7 font-mono font-semibold leading-tight tracking-[-0.02em]"
+        >
+          <span
+            className="block"
+            style={{ fontSize: "clamp(22px, 3.5vw, 36px)", color: "var(--nyx-accent)" }}
           >
-            Launch dapp
+            {cta.title}
+          </span>
+          <span
+            className="mt-2 block"
+            style={{ fontSize: "clamp(18px, 2.5vw, 28px)", color: "rgba(174,172,176,0.5)" }}
+          >
+            {cta.titleMuted}
+          </span>
+        </h2>
+        <p
+          className="mx-auto mt-5 max-w-lg font-mono text-[12px] leading-[1.85]"
+          style={{ color: "rgba(174,172,176,0.55)" }}
+        >
+          {cta.body}
+        </p>
+        <div className="mt-8 flex justify-center">
+          <Link
+            href="/architecture"
+            className="group inline-flex items-center gap-2 rounded-sm px-6 py-3.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] transition hover:opacity-90"
+            style={{
+              background: "var(--nyx-accent-soft)",
+              border: "1px solid oklch(0.62 0.14 260 / 0.4)",
+              color: "var(--nyx-accent)",
+            }}
+          >
+            Architecture
             <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true">
               <path
                 d="M2 5.5h7m0 0L5.5 2m3.5 3.5L5.5 9"
@@ -30,13 +53,6 @@ export function CtaSection() {
                 strokeLinejoin="round"
               />
             </svg>
-          </Link> */}
-          <Link
-            href="/architecture"
-            className="inline-flex items-center gap-2 rounded-sm px-6 py-3.5 text-[12px] font-semibold uppercase tracking-[0.14em] transition"
-            style={{ fontFamily: "'JetBrains Mono', monospace", border: "1px solid rgba(255,255,255,0.1)", color: "#aeacb0" }}
-          >
-            Architecture
           </Link>
         </div>
       </div>

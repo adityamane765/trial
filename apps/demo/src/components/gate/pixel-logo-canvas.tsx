@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { NyxMark } from "@/components/brand/nyx-mark";
+import { NyxMark, NyxLockup } from "@/components/brand/nyx-mark";
 
 /* -------------------------------------------------------------------------- */
 /* GRID DIMENSIONS                                                            */
@@ -50,30 +50,7 @@ const ROWS = 20;
 //
 // const WORD_PIXELS = buildWordPixels("darknyx", 4);
 
-/* -------------------------------------------------------------------------- */
-/* STATIC SVG MARK — top-left header, no animation                           */
-/* -------------------------------------------------------------------------- */
 
-function NyxStaticMark() {
-  const dots: [number, number][] = [
-    [10,0],[12,0],[14,0],[16,0],
-    [8,2],[10,2],[12,2],[14,2],[16,2],[18,2],
-    [6,4],[8,4],[10,4],[12,4],[14,4],[16,4],[18,4],[20,4],
-    [6,6],[8,6],[10,6],[12,6],[14,6],[16,6],[18,6],[20,6],
-    [2,10],[4,10],[6,10],[8,10],[10,10],[12,10],[14,10],[16,10],[18,10],[20,10],[22,10],[24,10],
-    [2,14],[4,14],[6,14],[8,14],[10,14],[12,14],
-  ];
-  return (
-    <svg width="28" height="18" viewBox="0 0 28 18" fill="none" aria-hidden="true">
-      {dots.map(([x, y], i) => (
-        <rect key={i} x={x} y={y} width={2} height={2}
-          fill={y <= 6 ? "#FA7E23" : y === 10 ? "#b84e10" : "#8a3808"}
-          opacity={y <= 4 ? 0.9 : y === 6 ? 0.75 : y === 10 ? 0.65 : 0.45}
-        />
-      ))}
-    </svg>
-  );
-}
 
 /* -------------------------------------------------------------------------- */
 /* MAIN COMPONENT                                                             */
@@ -91,6 +68,9 @@ export function PixelLogoCanvas() {
   const animRef = useRef<number>(0);
   const layoutRef = useRef({ originX: 0, originY: 0, CELL: 0, PIXEL: 0 });
   const [svgLayout, setSvgLayout] = useState<SvgLayout | null>(null);
+
+  const mouseRef = useRef({ x: -1000, y: -1000 });
+  const ripplesRef = useRef<Array<{ x: number; y: number; radius: number; maxRadius: number; opacity: number }>>([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -110,11 +90,8 @@ export function PixelLogoCanvas() {
     const gridW = COLS * CELL;
     const gridH = ROWS * CELL;
 
-    // Typed wordmark: size it so "darknyx" (7 chars, Space Grotesk 600)
-    // spans approximately gridW. Empirically ~0.6 ch/px ratio at weight 600.
     const wordFontSize = Math.round(gridW / 4.2);
-
-    const gap = CELL * 0.25; // reduced gap between logo and wordmark
+    const gap = CELL * 0.25;
     const totalH = gridH + gap + wordFontSize * 1.1;
 
     const originX = (W - gridW) / 2;
@@ -124,31 +101,196 @@ export function PixelLogoCanvas() {
     const wordTop = originY + gridH + gap;
     setSvgLayout({ originX, originY, gridW, gridH, wordFontSize, wordTop });
 
+    // Track mouse move and spawn interactive shockwaves
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = cvs.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      const lastX = mouseRef.current.x;
+      const lastY = mouseRef.current.y;
+      const distMoved = Math.sqrt((mx - lastX) ** 2 + (my - lastY) ** 2);
+
+      if (distMoved > 16) {
+        ripplesRef.current.push({
+          x: mx,
+          y: my,
+          radius: 0,
+          maxRadius: 240,
+          opacity: 1,
+        });
+
+        if (ripplesRef.current.length > 20) {
+          ripplesRef.current.shift();
+        }
+
+        mouseRef.current.x = mx;
+        mouseRef.current.y = my;
+      }
+    };
+
+    // Clicking spawns a massive shockwave!
+    const handleMouseDown = (e: MouseEvent) => {
+      const rect = cvs.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+
+      ripplesRef.current.push({
+        x: mx,
+        y: my,
+        radius: 0,
+        maxRadius: Math.max(W, H) * 0.5,
+        opacity: 1.2,
+      });
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousedown", handleMouseDown);
+
+    // Initial central opening welcome shockwave
+    setTimeout(() => {
+      ripplesRef.current.push({
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        radius: 0,
+        maxRadius: Math.max(window.innerWidth, window.innerHeight) * 0.45,
+        opacity: 1.0,
+      });
+    }, 300);
+
     function draw() {
       if (cvs.width !== window.innerWidth || cvs.height !== window.innerHeight) {
         W = window.innerWidth; H = window.innerHeight;
         cvs.width = W; cvs.height = H;
       }
 
-      // solid dark background
       ctx.fillStyle = "#050608";
       ctx.fillRect(0, 0, W, H);
 
-      // vertical grid lines
-      ctx.lineWidth = 1;
-      const gs = CELL;
-      for (let gx = ((originX % gs) + gs) % gs; gx < W; gx += gs) {
-        ctx.strokeStyle = "rgba(255,255,255,0.08)";
-        ctx.beginPath(); ctx.moveTo(Math.round(gx) + 0.5, 0); ctx.lineTo(Math.round(gx) + 0.5, H); ctx.stroke();
+      // Solve all active ripples
+      const activeRipples = ripplesRef.current;
+      for (let i = activeRipples.length - 1; i >= 0; i--) {
+        const rp = activeRipples[i];
+        rp.radius += 5.5; // speed of propagation
+        rp.opacity = 1 - (rp.radius / rp.maxRadius);
+        if (rp.radius >= rp.maxRadius) {
+          activeRipples.splice(i, 1);
+        }
       }
 
-      // pixel wordmark drawing removed — see commented-out PIXEL_FONT above
+      // Distorted Grid Math
+      const gs = 55; // Grid spacing step
+      const colsCount = Math.ceil(W / gs) + 1;
+      const rowsCount = Math.ceil(H / gs) + 1;
+
+      const points: Array<Array<{ x: number; y: number; glow: number }>> = [];
+      for (let r = 0; r < rowsCount; r++) {
+        points[r] = [];
+        for (let c = 0; c < colsCount; c++) {
+          const px = c * gs;
+          const py = r * gs;
+          let dx = 0;
+          let dy = 0;
+          let glow = 0;
+
+          for (let i = 0; i < activeRipples.length; i++) {
+            const rp = activeRipples[i];
+            const rx = px - rp.x;
+            const ry = py - rp.y;
+            const dist = Math.sqrt(rx * rx + ry * ry);
+
+            if (dist > 0) {
+              const waveDist = Math.abs(dist - rp.radius);
+              if (waveDist < 55) {
+                const intensity = (1 - waveDist / 55) * rp.opacity;
+                // Elastic shockwave push outward from source
+                const push = intensity * 22 * (1 - rp.radius / rp.maxRadius);
+                dx += (rx / dist) * push;
+                dy += (ry / dist) * push;
+                glow += intensity * rp.opacity;
+              }
+            }
+          }
+
+          points[r][c] = {
+            x: px + dx,
+            y: py + dy,
+            glow: Math.min(glow, 1.2),
+          };
+        }
+      }
+
+      // Draw horizontal lines
+      for (let r = 0; r < rowsCount; r++) {
+        for (let c = 0; c < colsCount - 1; c++) {
+          const p1 = points[r][c];
+          const p2 = points[r][c + 1];
+          const avgGlow = (p1.glow + p2.glow) / 2;
+
+          if (avgGlow > 0.05) {
+            ctx.strokeStyle = `rgba(59, 130, 246, ${0.08 + avgGlow * 0.38})`;
+            ctx.lineWidth = 1.2 + avgGlow * 1.2;
+          } else {
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
+            ctx.lineWidth = 0.8;
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+
+      // Draw vertical lines
+      for (let r = 0; r < rowsCount - 1; r++) {
+        for (let c = 0; c < colsCount; c++) {
+          const p1 = points[r][c];
+          const p2 = points[r + 1][c];
+          const avgGlow = (p1.glow + p2.glow) / 2;
+
+          if (avgGlow > 0.05) {
+            ctx.strokeStyle = `rgba(59, 130, 246, ${0.08 + avgGlow * 0.38})`;
+            ctx.lineWidth = 1.2 + avgGlow * 1.2;
+          } else {
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.04)";
+            ctx.lineWidth = 0.8;
+          }
+
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
+      }
+
+      // Draw glowing intersection nodes
+      for (let r = 0; r < rowsCount; r++) {
+        for (let c = 0; c < colsCount; c++) {
+          const p = points[r][c];
+          if (p.glow > 0.12) {
+            ctx.fillStyle = `rgba(59, 130, 246, ${p.glow * 0.78})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 1.8 + p.glow * 2.0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = `rgba(59, 130, 246, ${p.glow * 0.22})`;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 5 + p.glow * 6, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        }
+      }
 
       animRef.current = requestAnimationFrame(draw);
     }
 
     draw();
-    return () => cancelAnimationFrame(animRef.current);
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mousedown", handleMouseDown);
+    };
   }, []);
 
   return (
@@ -156,13 +298,7 @@ export function PixelLogoCanvas() {
       {/* HEADER */}
       <header className="absolute top-0 left-0 right-0 z-10 flex items-center px-8 py-5">
         <div className="flex items-center gap-2.5 select-none">
-          <NyxStaticMark />
-          <span
-            className="text-[13px] font-medium tracking-[0.06em]"
-            style={{ fontFamily: "'JetBrains Mono', monospace", color: "#c8b898" }}
-          >
-            DarkNyx
-          </span>
+          <NyxLockup size={22} tone="chalk" />
         </div>
         <span
           className="absolute left-1/2 -translate-x-1/2 text-[11px] uppercase tracking-[0.22em] pointer-events-none"
@@ -197,7 +333,7 @@ export function PixelLogoCanvas() {
         >
           <NyxMark
             size={Math.min(svgLayout.gridW, svgLayout.gridH)}
-            style={{ color: "#FA7E23" }}
+            style={{ color: "var(--nyx-accent)" }}
           />
         </button>
       )}
@@ -219,8 +355,8 @@ export function PixelLogoCanvas() {
             whiteSpace: "nowrap",
           }}
         >
-          <span style={{ fontWeight: 600, color: "#FA7E23" }}>dark</span>
-          <span style={{ fontWeight: 400, color: "#7a3810" }}>nyx</span>
+          <span style={{ fontWeight: 600, color: "var(--nyx-chalk)" }}>dark</span>
+          <span style={{ fontWeight: 400, color: "var(--nyx-chalk)", opacity: 0.55 }}>nyx</span>
         </div>
       )}
     </div>

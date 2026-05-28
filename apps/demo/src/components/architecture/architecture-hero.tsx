@@ -12,9 +12,9 @@ function DocsButton({ onClick }: { onClick?: () => void }) {
         fontSize: "10px",
         letterSpacing: "0.16em",
         textTransform: "uppercase",
-        color: "#FA7E23",
-        background: "rgba(255,137,29,0.08)",
-        border: "1px solid rgba(255,137,29,0.3)",
+        color: "var(--nyx-accent)",
+        background: "var(--nyx-accent-soft)",
+        border: "1px solid oklch(0.62 0.14 260 / 0.3)",
         borderRadius: "2px",
         padding: "8px 16px",
         cursor: "pointer",
@@ -57,7 +57,7 @@ export function ArchitectureHero({ onScrollDown }: { onScrollDown?: () => void }
             letterSpacing: "-0.045em",
           }}
         >
-          <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "#FA7E23" }}>
+          <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "var(--nyx-accent)" }}>
             Dark by default
           </span>
           <span style={{ display: "block", fontSize: "clamp(48px, 7vw, 70px)", color: "rgba(245,243,238,0.88)" }}>
@@ -69,49 +69,23 @@ export function ArchitectureHero({ onScrollDown }: { onScrollDown?: () => void }
         <div className="mt-14 flex flex-col gap-10 sm:flex-row sm:gap-22">
 
           {/* Architecture block */}
-          <div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "8.5px", letterSpacing: "0.24em", textTransform: "uppercase", color: "rgba(174,172,176,0.32)" }}>
+          <div style={{ maxWidth: "600px" }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "8.5px", letterSpacing: "0.24em", textTransform: "uppercase", color: "rgba(174,172,176,0.32)", marginBottom: "16px" }}>
               Architecture
             </div>
-            <ul className="mt-4 flex flex-col gap-2.5">
-              {[
-                "TEE-attested execution",
-                "Hidden order intent",
-                "Groth16 settlement proofs",
-                "Solana-native custody",
-              ].map((item) => (
-                <li key={item} className="flex items-start gap-2">
-                  <span style={{ color: "rgba(217,104,32,0.5)", fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", lineHeight: 1.4, marginTop: "1px" }}>·</span>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "13px", lineHeight: 1.5, color: "rgba(245,243,238,0.5)" }}>
-                    {item}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Status block */}
-          <div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "8.5px", letterSpacing: "0.24em", textTransform: "uppercase", color: "rgba(174,172,176,0.32)" }}>
-              Status
-            </div>
-            <ul className="mt-4 flex flex-col gap-2.5">
-              {[
-                { value: "3", label: "Layers" },
-                { value: "2", label: "Clusters" },
-                { value: "6", label: "ZK Circuits" },
-                { value: "1", label: "Settlement Path" },
-              ].map((stat) => (
-                <li key={stat.label} className="flex items-baseline gap-3">
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "18px", fontWeight: 700, letterSpacing: "-0.04em", color: "rgba(245,243,238,0.7)", lineHeight: 1 }}>
-                    {stat.value}
-                  </span>
-                  <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: "12px", color: "rgba(174,172,176,0.38)" }}>
-                    {stat.label}
-                  </span>
-                </li>
-              ))}
-            </ul>
+            <p
+              style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: "12.5px",
+                lineHeight: "1.85",
+                color: "rgba(245,243,238,0.55)",
+              }}
+            >
+              Darknyx is a privacy-preserving on-chain darkpool for Solana. Order intent stays
+              inside and gets matched in an Intel TDX attested TEE. Settlement lands as shielded UTXO notes
+              verified by Groth16 zero-knowledge proofs — every balance reconciles, no
+              individual order is exposed.
+            </p>
           </div>
 
         </div>

@@ -156,9 +156,9 @@ export function ProverSmokeTestPanel({ compact = false }: { compact?: boolean })
           className="rounded px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] transition-all disabled:cursor-not-allowed disabled:opacity-60"
           style={{
             fontFamily: "'JetBrains Mono', monospace",
-            background: running ? "rgba(217,104,32,0.08)" : "rgba(217,104,32,0.15)",
-            border: "1px solid rgba(217,104,32,0.35)",
-            color: running ? "rgba(217,104,32,0.5)" : "#FA7E23",
+            background: running ? "var(--nyx-accent-soft)" : "oklch(0.62 0.14 260 / 0.15)",
+            border: "1px solid oklch(0.62 0.14 260 / 0.35)",
+            color: running ? "oklch(0.62 0.14 260 / 0.5)" : "var(--nyx-accent)",
           }}
         >
           {running ? "Running…" : "Run smoke test"}
@@ -195,7 +195,7 @@ export function ProverSmokeTestPanel({ compact = false }: { compact?: boolean })
 
 function StatusBadge({ status }: { status: StepStatus }) {
   const cls: Record<StepStatus, string> = {
-    idle: "bg-[#FA7E23]/10 text-[#FA7E23] ring-1 ring-[#FA7E23]/20",
+    idle: "bg-nyx-accent/10 text-nyx-accent ring-1 ring-nyx-accent/20",
     running: "bg-nyx-signal-amber/18 text-nyx-signal-amber ring-1 ring-nyx-signal-amber/35",
     success: "bg-nyx-signal-green/18 text-nyx-signal-green ring-1 ring-nyx-signal-green/35",
     error: "bg-nyx-signal-red/18 text-nyx-signal-red ring-1 ring-nyx-signal-red/35",

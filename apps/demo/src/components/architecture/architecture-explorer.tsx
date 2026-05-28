@@ -83,13 +83,13 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
         {/* Left: back to menu or back to hero */}
         <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
           <button
-            onClick={onScrollUp}
+            onClick={active ? () => closeSection() : onScrollUp}
             style={{
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: "12px",
               letterSpacing: "0.2em",
               textTransform: "uppercase",
-              color: "rgba(217,104,32,0.75)",
+              color: "oklch(0.62 0.14 260 / 0.75)",
               background: "none",
               border: "none",
               cursor: "pointer",
@@ -99,10 +99,21 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
               padding: 0,
             }}
           >
-            <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
-              <path d="M4 11V1m0 0L1 4M4 1l3 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            hero
+            {active ? (
+              <>
+                <svg width="12" height="8" viewBox="0 0 12 8" fill="none">
+                  <path d="M11 4H1m0 0L4 1M1 4l3 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                back
+              </>
+            ) : (
+              <>
+                <svg width="8" height="12" viewBox="0 0 8 12" fill="none">
+                  <path d="M4 11V1m0 0L1 4M4 1l3 3" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                top
+              </>
+            )}
           </button>
           {active && (
             <button
@@ -112,7 +123,7 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
                 fontSize: "9px",
                 letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                color: "rgba(217,104,32,0.7)",
+                color: "oklch(0.62 0.14 260 / 0.7)",
                 background: "none",
                 border: "none",
                 cursor: "pointer",
@@ -188,19 +199,19 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
                   justifyContent: "space-between",
                   padding: "40px 32px",
                   background: "transparent",
-                  border: "1px solid rgba(250,126,35,0.06)",
-                  borderRight: idx < SECTIONS.length - 1 ? "1px solid rgba(250,126,35,0.06)" : "1px solid rgba(250,126,35,0.06)",
+                  border: "1px solid oklch(0.62 0.14 260 / 0.08)",
+                  borderRight: idx < SECTIONS.length - 1 ? "1px solid oklch(0.62 0.14 260 / 0.08)" : "1px solid oklch(0.62 0.14 260 / 0.08)",
                   cursor: "pointer",
                   textAlign: "left",
                   transition: "background 0.15s, border-color 0.15s",
                 }}
                 onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.background = "rgba(250,126,35,0.04)";
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(250,126,35,0.28)";
+                  (e.currentTarget as HTMLButtonElement).style.background = "oklch(0.62 0.14 260 / 0.05)";
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.62 0.14 260 / 0.3)";
                 }}
                 onMouseLeave={(e) => {
                   (e.currentTarget as HTMLButtonElement).style.background = "transparent";
-                  (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(250,126,35,0.12)";
+                  (e.currentTarget as HTMLButtonElement).style.borderColor = "oklch(0.62 0.14 260 / 0.15)";
                 }}
               >
                 {/* Top: index */}
@@ -208,7 +219,7 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: "11px",
                   letterSpacing: "0.1em",
-                  color: "rgba(217,104,32,0.45)",
+                  color: "oklch(0.62 0.14 260 / 0.45)",
                 }}>
                   {s.index}
                 </div>
@@ -239,7 +250,7 @@ export function ArchitectureExplorer({ onScrollUp }: { onScrollUp?: () => void }
                 {/* Bottom: arrow */}
                 <div style={{ display: "flex", justifyContent: "flex-end" }}>
                   <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
-                    <path d="M1 5h14m0 0L11 1m4 4-4 4" stroke="rgba(217,104,32,0.4)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M1 5h14m0 0L11 1m4 4-4 4" stroke="oklch(0.62 0.14 260 / 0.4)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
               </button>

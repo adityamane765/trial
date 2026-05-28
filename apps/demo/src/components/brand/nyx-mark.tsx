@@ -49,24 +49,36 @@ export function NyxMark({ size = 32, className, style, rising = false }: NyxMark
 export function NyxLockup({
   size = 24,
   tone = "chalk",
+  className,
+  style,
+  markSize,
 }: {
   size?: number;
   tone?: "chalk" | "ink";
+  className?: string;
+  style?: CSSProperties;
+  markSize?: number;
 }) {
-  const isInk = tone === "chalk";
+  const isInk = tone === "ink";
+  const color = isInk ? "var(--nyx-ink)" : "var(--nyx-chalk)";
   return (
-    <div className="flex items-center gap-2 select-none">
-      <NyxMark size={size} style={{ color: isInk ? "#FA7E23" : "var(--nyx-ink)" }} />
+    <div 
+      className={`flex items-center gap-4 select-none ${className || ""}`}
+      style={style}
+    >
+      <NyxMark size={markSize || Math.round(size * 1.15)} className="shrink-0" style={{ color }} />
       <span
         className="nyx-display"
         style={{
           fontSize: `${Math.round(size * 0.75)}px`,
           letterSpacing: "-0.03em",
           fontWeight: 600,
+          fontFamily: "var(--nyx-font-display)",
+          color,
         }}
       >
-        <span style={{ color: isInk ? "#FA7E23" : "var(--nyx-ink)" }}>dark</span>
-        <span style={{ color: isInk ? "#7a3810" : "var(--nyx-slate)", fontWeight: 400 }}>nyx</span>
+        <span>dark</span>
+        <span style={{ opacity: 0.55, fontWeight: 400 }}>nyx</span>
       </span>
     </div>
   );

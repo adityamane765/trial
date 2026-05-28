@@ -1,4 +1,4 @@
-import { NyxMark } from "./nyx-mark";
+import { NyxLockup } from "./nyx-mark";
 
 export function NyxFooter({ tone = "ink" }: { tone?: "ink" | "chalk" }) {
   const isInk = tone === "ink";
@@ -11,22 +11,7 @@ export function NyxFooter({ tone = "ink" }: { tone?: "ink" | "chalk" }) {
       }
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-5 sm:px-7 md:flex-row md:items-end md:justify-between">
-        <div className="flex items-center gap-3">
-          <NyxMark size={28} className={isInk ? "text-nyx-chalk" : "text-nyx-ink"} />
-          <div>
-            <div
-              className={
-                isInk
-                  ? "text-[13px] font-medium text-nyx-chalk"
-                  : "text-[13px] font-medium text-nyx-ink"
-              }
-            >
-              darknyx
-            </div>
-            <div className="font-mono text-[10px] uppercase tracking-[0.18em] opacity-60">
-            </div>
-          </div>
-        </div>
+        <NyxLockup size={28} tone={isInk ? "chalk" : "ink"} />
 
         <div className="font-mono text-[10px] uppercase tracking-[0.16em] opacity-50">
           coming soon on mainnet

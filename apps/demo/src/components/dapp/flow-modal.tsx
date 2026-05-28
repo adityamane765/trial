@@ -142,7 +142,7 @@ function TransitionContent({
       {/* Title — scrambled */}
       <div style={{ height: "28px" }} className="flex items-center">
         <span className="text-[17px] font-bold uppercase tracking-[0.18em]"
-          style={{ fontFamily: "'JetBrains Mono', monospace", color: "#FA7E23" }}>
+          style={{ fontFamily: "'JetBrains Mono', monospace", color: "var(--nyx-accent)" }}>
           {scrambled[0]?.slice(0, title.length) ?? title}
         </span>
       </div>
@@ -172,7 +172,7 @@ function LogEntry({ line, fresh }: { line: LogLine; fresh: boolean }) {
           href={line.href}
           target="_blank"
           rel="noreferrer"
-          className="text-[#FA7E23] underline underline-offset-2 hover:text-[#f08040]"
+          className="text-[var(--nyx-accent)] underline underline-offset-2 hover:text-[var(--nyx-accent)]/80"
         >
           {line.value}
         </a>
@@ -912,7 +912,7 @@ function FlowModalInner({
         className="relative flex w-full max-w-2xl flex-col overflow-hidden"
         style={{
           background: "#0d0f12",
-          border: "1px solid rgba(217,104,32,0.18)",
+          border: "1px solid var(--nyx-accent-soft)",
           borderRadius: "4px",
           boxShadow: "0 0 0 1px rgba(0,0,0,0.8), 0 32px 80px rgba(0,0,0,0.7)",
           minHeight: "480px",
@@ -924,7 +924,7 @@ function FlowModalInner({
           className="pointer-events-none absolute inset-0"
           style={{
             backgroundImage:
-              "repeating-linear-gradient(transparent, transparent 27px, rgba(217,104,32,0.06) 27px, rgba(217,104,32,0.06) 28px)",
+              "repeating-linear-gradient(transparent, transparent 27px, oklch(0.62 0.14 260 / 0.06) 27px, oklch(0.62 0.14 260 / 0.06) 28px)",
             backgroundPosition: "0 48px",
           }}
         />
@@ -932,13 +932,13 @@ function FlowModalInner({
         {/* Left margin rule */}
         <div
           className="pointer-events-none absolute bottom-0 left-12 top-0"
-          style={{ borderLeft: "1px solid rgba(217,104,32,0.12)" }}
+          style={{ borderLeft: "1px solid oklch(0.62 0.14 260 / 0.12)" }}
         />
 
         {/* Header bar */}
         <div
           className="relative flex items-center justify-between border-b px-4 py-3"
-          style={{ borderColor: "rgba(217,104,32,0.15)" }}
+          style={{ borderColor: "oklch(0.62 0.14 260 / 0.15)" }}
         >
           {/* Step tabs */}
           <div className="flex items-center gap-1">
@@ -955,14 +955,14 @@ function FlowModalInner({
                   fontFamily: "'JetBrains Mono', monospace",
                   color:
                     currentStep === s
-                      ? "#FA7E23"
+                      ? "var(--nyx-accent)"
                       : (s === "trade" && !identityDone) || (s === "deposit" && !tradeDone)
                         ? "rgba(107,107,116,0.4)"
                         : "rgba(107,107,116,0.8)",
-                  borderBottom: currentStep === s ? "1px solid #FA7E23" : "1px solid transparent",
+                  borderBottom: currentStep === s ? "1px solid var(--nyx-accent)" : "1px solid transparent",
                 }}
               >
-                <span style={{ color: currentStep === s ? "#FA7E23" : "rgba(107,107,116,0.5)" }}>
+                <span style={{ color: currentStep === s ? "var(--nyx-accent)" : "rgba(107,107,116,0.5)" }}>
                   {i + 1}.
                 </span>
                 {s === "identity" ? "Identity" : s === "trade" ? "Trade" : "Deposit"}
@@ -974,7 +974,7 @@ function FlowModalInner({
           <div className="flex items-center gap-3">
             <span
               className="text-[10px] uppercase tracking-[0.18em]"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "rgba(217,104,32,0.6)" }}
+              style={{ fontFamily: "'JetBrains Mono', monospace", color: "oklch(0.62 0.14 260 / 0.6)" }}
             >
               {stepContent.operation}
             </span>
@@ -1004,7 +1004,7 @@ function FlowModalInner({
           {/* Title */}
           <div style={{ height: "28px" }} className="flex items-center">
             <span className="text-[17px] font-bold uppercase tracking-[0.18em]"
-              style={{ fontFamily: "'JetBrains Mono', monospace", color: "#FA7E23" }}>
+              style={{ fontFamily: "'JetBrains Mono', monospace", color: "var(--nyx-accent)" }}>
               {stepContent.title}
             </span>
           </div>
@@ -1071,7 +1071,7 @@ function FlowModalInner({
         {/* Footer — action button */}
         <div
           className="relative flex items-center justify-between border-t px-12 py-4"
-          style={{ borderColor: "rgba(217,104,32,0.12)" }}
+          style={{ borderColor: "oklch(0.62 0.14 260 / 0.12)" }}
         >
           <span
             className="text-[10px] uppercase tracking-[0.16em]"
@@ -1088,9 +1088,9 @@ function FlowModalInner({
               className="rounded px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors"
               style={{
                 fontFamily: "'JetBrains Mono', monospace",
-                background: "rgba(217,104,32,0.12)",
-                border: "1px solid rgba(217,104,32,0.3)",
-                color: "#FA7E23",
+                background: "var(--nyx-accent-soft)",
+                border: "1px solid oklch(0.62 0.14 260 / 0.3)",
+                color: "var(--nyx-accent)",
               }}
             >
               Trade again →
@@ -1102,9 +1102,9 @@ function FlowModalInner({
               className="rounded px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] transition-all"
               style={{
                 fontFamily: "'JetBrains Mono', monospace",
-                background: stepContent.busy ? "rgba(217,104,32,0.08)" : "rgba(217,104,32,0.15)",
-                border: "1px solid rgba(217,104,32,0.35)",
-                color: stepContent.busy ? "rgba(217,104,32,0.5)" : "#FA7E23",
+                background: stepContent.busy ? "oklch(0.62 0.14 260 / 0.08)" : "var(--nyx-accent-soft)",
+                border: "1px solid oklch(0.62 0.14 260 / 0.35)",
+                color: stepContent.busy ? "oklch(0.62 0.14 260 / 0.5)" : "var(--nyx-accent)",
                 cursor: stepContent.busy ? "not-allowed" : "pointer",
               }}
             >

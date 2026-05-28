@@ -69,7 +69,7 @@ export default function DappPage() {
                       type="button"
                       disabled
                       className="rounded px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em]"
-                      style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(217,104,32,0.08)", border: "1px solid rgba(217,104,32,0.2)", color: "rgba(217,104,32,0.4)" }}
+                      style={{ fontFamily: "'JetBrains Mono', monospace", background: "var(--nyx-accent-soft)", border: "1px solid oklch(0.62 0.14 260 / 0.2)", color: "oklch(0.62 0.14 260 / 0.4)" }}
                     >
                       Loading wallet…
                     </button>
@@ -82,7 +82,7 @@ export default function DappPage() {
                         : "not connected"}
                 </span>
                 {solBalance != null && (
-                  <span className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "rgba(217,104,32,0.7)" }}>
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em]" style={{ color: "oklch(0.62 0.14 260 / 0.7)" }}>
                     {solBalance.toFixed(4)} SOL
                   </span>
                 )}
@@ -98,9 +98,9 @@ export default function DappPage() {
           <div
             className="relative overflow-hidden rounded-2xl border p-8"
             style={{
-              borderColor: "rgba(217,104,32,0.22)",
+              borderColor: "oklch(0.62 0.14 260 / 0.22)",
               background: "#050505",
-              boxShadow: "0 0 0 1px rgba(0,0,0,0.5), inset 0 1px 0 rgba(217,104,32,0.06)",
+              boxShadow: "0 0 0 1px rgba(0,0,0,0.5), inset 0 1px 0 oklch(0.62 0.14 260 / 0.06)",
               marginTop: "-50px"
             }}
           >
@@ -113,9 +113,9 @@ export default function DappPage() {
                 className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.18em]"
                 style={{
                   fontFamily: "'JetBrains Mono', monospace",
-                  background: "rgba(217,104,32,0.1)",
-                  border: "1px solid rgba(217,104,32,0.2)",
-                  color: "#fa7e23",
+                  background: "var(--nyx-accent-soft)",
+                  border: "1px solid oklch(0.62 0.14 260 / 0.2)",
+                  color: "var(--nyx-accent)",
                 }}
               >
                 Full flow · 3 steps
@@ -156,7 +156,7 @@ export default function DappPage() {
                           color: "#aeacb0",
                         }}
                       >
-                        <span style={{ color: "rgba(217,104,32,0.7)" }}>{n}</span>
+                        <span style={{ color: "oklch(0.62 0.14 260 / 0.7)" }}>{n}</span>
                         {label}
                       </div>
                     ))}
@@ -172,12 +172,12 @@ export default function DappPage() {
                     style={{
                       fontFamily: "'JetBrains Mono', monospace",
                       background: connected
-                        ? "rgba(217,104,32,0.18)"
+                        ? "var(--nyx-accent-soft)"
                         : "rgba(255,255,255,0.04)",
                       border: connected
-                        ? "1px solid rgba(217,104,32,0.4)"
+                        ? "1px solid oklch(0.62 0.14 260 / 0.4)"
                         : "1px solid rgba(255,255,255,0.1)",
-                      color: connected ? "#fa7e23" : "#6b6b74",
+                      color: connected ? "var(--nyx-accent)" : "#6b6b74",
                     }}
                   >
                     {connected ? "Open notebook →" : "Connect wallet to start"}
@@ -208,14 +208,14 @@ export default function DappPage() {
           <div
             className="relative overflow-hidden rounded-2xl border p-8"
             style={{
-              borderColor: "rgba(217,104,32,0.22)",
+              borderColor: "oklch(0.62 0.14 260 / 0.22)",
               background: "linear-gradient(135deg, #0d0f12 0%, #0a0c0e 100%)",
-              boxShadow: "0 0 0 1px rgba(0,0,0,0.5), inset 0 1px 0 rgba(217,104,32,0.06)",
+              boxShadow: "0 0 0 1px rgba(0,0,0,0.5), inset 0 1px 0 oklch(0.62 0.14 260 / 0.06)",
             }}
           >
             <div className="nyx-grid pointer-events-none absolute inset-0 opacity-30" />
             <div className="relative mb-4 flex items-center justify-between">
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", background: "rgba(217,104,32,0.1)", border: "1px solid rgba(217,104,32,0.2)", color: "#fa7e23" }}
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", background: "var(--nyx-accent-soft)", border: "1px solid oklch(0.62 0.14 260 / 0.2)", color: "var(--nyx-accent)" }}
                 className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.18em]">
                 ZK prover · smoke test
               </span>
